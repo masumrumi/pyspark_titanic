@@ -52,12 +52,12 @@ for dirname, _, filenames in os.walk('../input'):
 
 ```python
 ## installing pyspark
-!pipenv install pyspark
+!pip install pyspark
 ```
 
     [32m[22mCourtesy Notice[39m[22m: Pipenv found itself running within a virtual environment, so it will automatically use that environment, instead of creating its own for any project. You can set [39m[1mPIPENV_IGNORE_VIRTUALENVS=1[39m[22m to force pipenv to ignore that environment and create its own instead. You can set [39m[1mPIPENV_VERBOSITY=-1[39m[22m to suppress this warning.
     [39m[1mInstalling [32m[1mpyspark[39m[22m...[39m[22m
-    [K[39m[1mAdding[39m[22m [32m[1mpyspark[39m[22m [39m[1mto Pipfile's[39m[22m [33m[1m[packages][39m[22m[39m[1m...[39m[22m
+    ⠸[0m Installing pyspark...[K[K[39m[1mAdding[39m[22m [32m[1mpyspark[39m[22m [39m[1mto Pipfile's[39m[22m [33m[1m[packages][39m[22m[39m[1m...[39m[22m
     [K[?25h✔ Installation Succeeded[0m 
     [39m[1mInstalling dependencies from Pipfile.lock (7f8632)...[39m[22m
       🐍   [32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m 0/0 — [30m[22m00:00:00[39m[22m
@@ -68,7 +68,7 @@ for dirname, _, filenames in os.walk('../input'):
 
 ```python
 ## installing pyarrow
-!pipenv install pyarrow
+!pip install pyarrow
 ```
 
     [32m[22mCourtesy Notice[39m[22m: Pipenv found itself running within a virtual environment, so it will automatically use that environment, instead of creating its own for any project. You can set [39m[1mPIPENV_IGNORE_VIRTUALENVS=1[39m[22m to force pipenv to ignore that environment and create its own instead. You can set [39m[1mPIPENV_VERBOSITY=-1[39m[22m to suppress this warning.
@@ -95,11 +95,11 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName('tutorial').getOrCreate()
 ```
 
-    23/10/26 20:18:32 WARN Utils: Your hostname, Masums-iMac.local resolves to a loopback address: 127.0.0.1; using 192.168.1.104 instead (on interface en1)
-    23/10/26 20:18:32 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+    23/10/26 20:22:50 WARN Utils: Your hostname, Masums-iMac.local resolves to a loopback address: 127.0.0.1; using 192.168.1.104 instead (on interface en1)
+    23/10/26 20:22:50 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
     Setting default log level to "WARN".
     To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-    23/10/26 20:18:32 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+    23/10/26 20:22:51 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 
 
 Let's read the dataset. 
@@ -386,7 +386,7 @@ df_train.toPandas()
 result = df_train.describe().toPandas()
 ```
 
-    23/10/26 20:18:42 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
+    23/10/26 20:23:01 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
                                                                                     
 
 
@@ -4168,15 +4168,11 @@ df1.exceptAll(df2).show()
     
 
 
-                                                                                    
-
 
 ```python
 # intersect
 df1.intersect(df2).show()
 ```
-
-    [Stage 170:=====================>                                   (3 + 5) / 8]
 
     +---+---+
     | C1| C2|
@@ -4186,8 +4182,6 @@ df1.intersect(df2).show()
     +---+---+
     
 
-
-                                                                                    
 
 
 ```python
@@ -5320,7 +5314,7 @@ df_train.groupBy(['Sex', 'Pclass']).count().show()
 df_train.hint("broadcast").show()
 ```
 
-    23/10/26 20:19:57 WARN HintErrorLogger: A join hint (strategy=broadcast) is specified but it is not part of a join relation.
+    23/10/26 20:23:34 WARN HintErrorLogger: A join hint (strategy=broadcast) is specified but it is not part of a join relation.
 
 
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+------------------+----------+
