@@ -1,6 +1,4 @@
-<img src="http://data.freehdw.com/ships-titanic-vehicles-best.jpg"  Width="800">
-
-
+![plot](../images/titanic-submersible-oceangate-illustration-andrea-gatti.jpg)
 
 
 This kernel will give a tutorial for starting out with PySpark using Titanic dataset. Let's get started. 
@@ -55,31 +53,9 @@ for dirname, _, filenames in os.walk('../input'):
 !pip install pyspark
 ```
 
-    [32m[22mCourtesy Notice[39m[22m: Pipenv found itself running within a virtual environment, so it will automatically use that environment, instead of creating its own for any project. You can set [39m[1mPIPENV_IGNORE_VIRTUALENVS=1[39m[22m to force pipenv to ignore that environment and create its own instead. You can set [39m[1mPIPENV_VERBOSITY=-1[39m[22m to suppress this warning.
-    [39m[1mInstalling [32m[1mpyspark[39m[22m...[39m[22m
-    ⠸[0m Installing pyspark...[K[K[39m[1mAdding[39m[22m [32m[1mpyspark[39m[22m [39m[1mto Pipfile's[39m[22m [33m[1m[packages][39m[22m[39m[1m...[39m[22m
-    [K[?25h✔ Installation Succeeded[0m 
-    [39m[1mInstalling dependencies from Pipfile.lock (7f8632)...[39m[22m
-      🐍   [32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m 0/0 — [30m[22m00:00:00[39m[22m
-    To activate this project's virtualenv, run [33m[22mpipenv shell[39m[22m.
-    Alternatively, run a command inside the virtualenv with [33m[22mpipenv run[39m[22m.
-    [0m
+    Requirement already satisfied: pyspark in /Users/masumrumi/.local/share/virtualenvs/pyspark_titanic-AKXOLEKJ/lib/python3.11/site-packages (3.5.1)
+    Requirement already satisfied: py4j==0.10.9.7 in /Users/masumrumi/.local/share/virtualenvs/pyspark_titanic-AKXOLEKJ/lib/python3.11/site-packages (from pyspark) (0.10.9.7)
 
-
-```python
-## installing pyarrow
-!pip install pyarrow
-```
-
-    [32m[22mCourtesy Notice[39m[22m: Pipenv found itself running within a virtual environment, so it will automatically use that environment, instead of creating its own for any project. You can set [39m[1mPIPENV_IGNORE_VIRTUALENVS=1[39m[22m to force pipenv to ignore that environment and create its own instead. You can set [39m[1mPIPENV_VERBOSITY=-1[39m[22m to suppress this warning.
-    [39m[1mInstalling [32m[1mpyarrow[39m[22m...[39m[22m
-    [K[39m[1mAdding[39m[22m [32m[1mpyarrow[39m[22m [39m[1mto Pipfile's[39m[22m [33m[1m[packages][39m[22m[39m[1m...[39m[22m
-    [K[?25h✔ Installation Succeeded[0m 
-    [39m[1mInstalling dependencies from Pipfile.lock (7f8632)...[39m[22m
-      🐍   [32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m[32m[1m▉[39m[22m 0/0 — [30m[22m00:00:00[39m[22m
-    To activate this project's virtualenv, run [33m[22mpipenv shell[39m[22m.
-    Alternatively, run a command inside the virtualenv with [33m[22mpipenv run[39m[22m.
-    [0m
 
 The first step in using Spark is connecting to a cluster. In practice, the cluster will be hosted on a remote machine that's connected to all other nodes. There will be one computer, called the master that manages splitting up the data and the computations. The master is connected to the rest of the computers in the cluster, which are called worker. The master sends the workers data and calculations to run, and they send their results back to the master.
 
@@ -94,13 +70,6 @@ This part is solely for beginners. I recommend starting from here to get a good 
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName('tutorial').getOrCreate()
 ```
-
-    23/10/26 20:22:50 WARN Utils: Your hostname, Masums-iMac.local resolves to a loopback address: 127.0.0.1; using 192.168.1.104 instead (on interface en1)
-    23/10/26 20:22:50 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
-    Setting default log level to "WARN".
-    To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-    23/10/26 20:22:51 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-
 
 Let's read the dataset. 
 
@@ -131,33 +100,33 @@ type(df_train)
 
 ```python
 ## As you can see it's a Spark dataframe. Let's take a look at the preview of the dataset. 
-df_train.show()
+df_train.show(truncate=False)
 ```
 
-    +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
-    |PassengerId|Survived|Pclass|                Name|   Sex| Age|SibSp|Parch|          Ticket|   Fare|Cabin|Embarked|
-    +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
-    |          1|       0|     3|Braund, Mr. Owen ...|  male|22.0|    1|    0|       A/5 21171|   7.25| NULL|       S|
-    |          2|       1|     1|Cumings, Mrs. Joh...|female|38.0|    1|    0|        PC 17599|71.2833|  C85|       C|
-    |          3|       1|     3|Heikkinen, Miss. ...|female|26.0|    0|    0|STON/O2. 3101282|  7.925| NULL|       S|
-    |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|          113803|   53.1| C123|       S|
-    |          5|       0|     3|Allen, Mr. Willia...|  male|35.0|    0|    0|          373450|   8.05| NULL|       S|
-    |          6|       0|     3|    Moran, Mr. James|  male|NULL|    0|    0|          330877| 8.4583| NULL|       Q|
-    |          7|       0|     1|McCarthy, Mr. Tim...|  male|54.0|    0|    0|           17463|51.8625|  E46|       S|
-    |          8|       0|     3|Palsson, Master. ...|  male| 2.0|    3|    1|          349909| 21.075| NULL|       S|
-    |          9|       1|     3|Johnson, Mrs. Osc...|female|27.0|    0|    2|          347742|11.1333| NULL|       S|
-    |         10|       1|     2|Nasser, Mrs. Nich...|female|14.0|    1|    0|          237736|30.0708| NULL|       C|
-    |         11|       1|     3|Sandstrom, Miss. ...|female| 4.0|    1|    1|         PP 9549|   16.7|   G6|       S|
-    |         12|       1|     1|Bonnell, Miss. El...|female|58.0|    0|    0|          113783|  26.55| C103|       S|
-    |         13|       0|     3|Saundercock, Mr. ...|  male|20.0|    0|    0|       A/5. 2151|   8.05| NULL|       S|
-    |         14|       0|     3|Andersson, Mr. An...|  male|39.0|    1|    5|          347082| 31.275| NULL|       S|
-    |         15|       0|     3|Vestrom, Miss. Hu...|female|14.0|    0|    0|          350406| 7.8542| NULL|       S|
-    |         16|       1|     2|Hewlett, Mrs. (Ma...|female|55.0|    0|    0|          248706|   16.0| NULL|       S|
-    |         17|       0|     3|Rice, Master. Eugene|  male| 2.0|    4|    1|          382652| 29.125| NULL|       Q|
-    |         18|       1|     2|Williams, Mr. Cha...|  male|NULL|    0|    0|          244373|   13.0| NULL|       S|
-    |         19|       0|     3|Vander Planke, Mr...|female|31.0|    1|    0|          345763|   18.0| NULL|       S|
-    |         20|       1|     3|Masselmani, Mrs. ...|female|NULL|    0|    0|            2649|  7.225| NULL|       C|
-    +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+    +-----------+--------+------+-------------------------------------------------------+------+----+-----+-----+----------------+-------+-----+--------+
+    |PassengerId|Survived|Pclass|Name                                                   |Sex   |Age |SibSp|Parch|Ticket          |Fare   |Cabin|Embarked|
+    +-----------+--------+------+-------------------------------------------------------+------+----+-----+-----+----------------+-------+-----+--------+
+    |1          |0       |3     |Braund, Mr. Owen Harris                                |male  |22.0|1    |0    |A/5 21171       |7.25   |NULL |S       |
+    |2          |1       |1     |Cumings, Mrs. John Bradley (Florence Briggs Thayer)    |female|38.0|1    |0    |PC 17599        |71.2833|C85  |C       |
+    |3          |1       |3     |Heikkinen, Miss. Laina                                 |female|26.0|0    |0    |STON/O2. 3101282|7.925  |NULL |S       |
+    |4          |1       |1     |Futrelle, Mrs. Jacques Heath (Lily May Peel)           |female|35.0|1    |0    |113803          |53.1   |C123 |S       |
+    |5          |0       |3     |Allen, Mr. William Henry                               |male  |35.0|0    |0    |373450          |8.05   |NULL |S       |
+    |6          |0       |3     |Moran, Mr. James                                       |male  |NULL|0    |0    |330877          |8.4583 |NULL |Q       |
+    |7          |0       |1     |McCarthy, Mr. Timothy J                                |male  |54.0|0    |0    |17463           |51.8625|E46  |S       |
+    |8          |0       |3     |Palsson, Master. Gosta Leonard                         |male  |2.0 |3    |1    |349909          |21.075 |NULL |S       |
+    |9          |1       |3     |Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg)      |female|27.0|0    |2    |347742          |11.1333|NULL |S       |
+    |10         |1       |2     |Nasser, Mrs. Nicholas (Adele Achem)                    |female|14.0|1    |0    |237736          |30.0708|NULL |C       |
+    |11         |1       |3     |Sandstrom, Miss. Marguerite Rut                        |female|4.0 |1    |1    |PP 9549         |16.7   |G6   |S       |
+    |12         |1       |1     |Bonnell, Miss. Elizabeth                               |female|58.0|0    |0    |113783          |26.55  |C103 |S       |
+    |13         |0       |3     |Saundercock, Mr. William Henry                         |male  |20.0|0    |0    |A/5. 2151       |8.05   |NULL |S       |
+    |14         |0       |3     |Andersson, Mr. Anders Johan                            |male  |39.0|1    |5    |347082          |31.275 |NULL |S       |
+    |15         |0       |3     |Vestrom, Miss. Hulda Amanda Adolfina                   |female|14.0|0    |0    |350406          |7.8542 |NULL |S       |
+    |16         |1       |2     |Hewlett, Mrs. (Mary D Kingcome)                        |female|55.0|0    |0    |248706          |16.0   |NULL |S       |
+    |17         |0       |3     |Rice, Master. Eugene                                   |male  |2.0 |4    |1    |382652          |29.125 |NULL |Q       |
+    |18         |1       |2     |Williams, Mr. Charles Eugene                           |male  |NULL|0    |0    |244373          |13.0   |NULL |S       |
+    |19         |0       |3     |Vander Planke, Mrs. Julius (Emelia Maria Vandemoortele)|female|31.0|1    |0    |345763          |18.0   |NULL |S       |
+    |20         |1       |3     |Masselmani, Mrs. Fatima                                |female|NULL|0    |0    |2649            |7.225  |NULL |C       |
+    +-----------+--------+------+-------------------------------------------------------+------+----+-----+-----+----------------+-------+-----+--------+
     only showing top 20 rows
     
 
@@ -378,15 +347,11 @@ df_train.toPandas()
 
 
 ```python
-# I use the toPandas() in a riddiculous amount as you will see in this kernel. 
-# It is just convenient and doesn't put a lot of constran in my eye. 
-## in addition to that if you know pandas, this can be very helpful 
-## for checking your work.
 ## how about a summary. 
 result = df_train.describe().toPandas()
 ```
 
-    23/10/26 20:23:01 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
+    24/05/30 18:55:58 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
                                                                                     
 
 
@@ -542,8 +507,153 @@ print(f"After: {type(spark_temp)}")
     After: <class 'pyspark.sql.dataframe.DataFrame'>
 
 
-    /Users/masumrumi/.local/share/virtualenvs/pyspark_titanic-AKXOLEKJ/lib/python3.11/site-packages/pyspark/sql/pandas/conversion.py:485: FutureWarning: is_datetime64tz_dtype is deprecated and will be removed in a future version. Check `isinstance(dtype, pd.DatetimeTZDtype)` instead.
-      if should_localize and is_datetime64tz_dtype(s.dtype) and s.dt.tz is not None:
+
+```python
+# pyspark version
+spark_temp.show()
+```
+
+                                                                                    
+
+    +-------+-----------------+-------------------+------------------+--------------------+------+------------------+------------------+-------------------+------------------+-----------------+-----+--------+
+    |summary|      PassengerId|           Survived|            Pclass|                Name|   Sex|               Age|             SibSp|              Parch|            Ticket|             Fare|Cabin|Embarked|
+    +-------+-----------------+-------------------+------------------+--------------------+------+------------------+------------------+-------------------+------------------+-----------------+-----+--------+
+    |  count|              891|                891|               891|                 891|   891|               714|               891|                891|               891|              891|  204|     889|
+    |   mean|            446.0| 0.3838383838383838| 2.308641975308642|                NULL|  NULL| 29.69911764705882|0.5230078563411896|0.38159371492704824|260318.54916792738| 32.2042079685746| NULL|    NULL|
+    | stddev|257.3538420152301|0.48659245426485753|0.8360712409770491|                NULL|  NULL|14.526497332334035|1.1027434322934315| 0.8060572211299488|471609.26868834975|49.69342859718089| NULL|    NULL|
+    |    min|                1|                  0|                 1|"Andersson, Mr. A...|female|              0.42|                 0|                  0|            110152|              0.0|  A10|       C|
+    |    max|              891|                  1|                 3|van Melkebeke, Mr...|  male|              80.0|                 8|                  6|         WE/P 5735|         512.3292|    T|       S|
+    +-------+-----------------+-------------------+------------------+--------------------+------+------------------+------------------+-------------------+------------------+-----------------+-----+--------+
+    
+
+
+
+```python
+# pandas version
+result
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>summary</th>
+      <th>PassengerId</th>
+      <th>Survived</th>
+      <th>Pclass</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Ticket</th>
+      <th>Fare</th>
+      <th>Cabin</th>
+      <th>Embarked</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>count</td>
+      <td>891</td>
+      <td>891</td>
+      <td>891</td>
+      <td>891</td>
+      <td>891</td>
+      <td>714</td>
+      <td>891</td>
+      <td>891</td>
+      <td>891</td>
+      <td>891</td>
+      <td>204</td>
+      <td>889</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>mean</td>
+      <td>446.0</td>
+      <td>0.3838383838383838</td>
+      <td>2.308641975308642</td>
+      <td>None</td>
+      <td>None</td>
+      <td>29.69911764705882</td>
+      <td>0.5230078563411896</td>
+      <td>0.38159371492704824</td>
+      <td>260318.54916792738</td>
+      <td>32.2042079685746</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>stddev</td>
+      <td>257.3538420152301</td>
+      <td>0.48659245426485753</td>
+      <td>0.8360712409770491</td>
+      <td>None</td>
+      <td>None</td>
+      <td>14.526497332334035</td>
+      <td>1.1027434322934315</td>
+      <td>0.8060572211299488</td>
+      <td>471609.26868834975</td>
+      <td>49.69342859718089</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>min</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>"Andersson, Mr. August Edvard (""Wennerstrom"")"</td>
+      <td>female</td>
+      <td>0.42</td>
+      <td>0</td>
+      <td>0</td>
+      <td>110152</td>
+      <td>0.0</td>
+      <td>A10</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>max</td>
+      <td>891</td>
+      <td>1</td>
+      <td>3</td>
+      <td>van Melkebeke, Mr. Philemon</td>
+      <td>male</td>
+      <td>80.0</td>
+      <td>8</td>
+      <td>6</td>
+      <td>WE/P 5735</td>
+      <td>512.3292</td>
+      <td>T</td>
+      <td>S</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 
 
@@ -603,199 +713,24 @@ df_train.createOrReplaceTempView("mytable");
 
 ## Then, we use spark.sql and write sql inside it, which returns a spark Dataframe.  
 result = spark.sql("SELECT * FROM mytable ORDER BY Fare DESC LIMIT 10")
-result.toPandas()
+result.show(truncate=False)
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>PassengerId</th>
-      <th>Survived</th>
-      <th>Pclass</th>
-      <th>Name</th>
-      <th>Sex</th>
-      <th>Age</th>
-      <th>SibSp</th>
-      <th>Parch</th>
-      <th>Ticket</th>
-      <th>Fare</th>
-      <th>Cabin</th>
-      <th>Embarked</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>680</td>
-      <td>1</td>
-      <td>1</td>
-      <td>Cardeza, Mr. Thomas Drake Martinez</td>
-      <td>male</td>
-      <td>36.0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>PC 17755</td>
-      <td>512.3292</td>
-      <td>B51 B53 B55</td>
-      <td>C</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>259</td>
-      <td>1</td>
-      <td>1</td>
-      <td>Ward, Miss. Anna</td>
-      <td>female</td>
-      <td>35.0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>PC 17755</td>
-      <td>512.3292</td>
-      <td>None</td>
-      <td>C</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>738</td>
-      <td>1</td>
-      <td>1</td>
-      <td>Lesurer, Mr. Gustave J</td>
-      <td>male</td>
-      <td>35.0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>PC 17755</td>
-      <td>512.3292</td>
-      <td>B101</td>
-      <td>C</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>89</td>
-      <td>1</td>
-      <td>1</td>
-      <td>Fortune, Miss. Mabel Helen</td>
-      <td>female</td>
-      <td>23.0</td>
-      <td>3</td>
-      <td>2</td>
-      <td>19950</td>
-      <td>263.0000</td>
-      <td>C23 C25 C27</td>
-      <td>S</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>28</td>
-      <td>0</td>
-      <td>1</td>
-      <td>Fortune, Mr. Charles Alexander</td>
-      <td>male</td>
-      <td>19.0</td>
-      <td>3</td>
-      <td>2</td>
-      <td>19950</td>
-      <td>263.0000</td>
-      <td>C23 C25 C27</td>
-      <td>S</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>342</td>
-      <td>1</td>
-      <td>1</td>
-      <td>Fortune, Miss. Alice Elizabeth</td>
-      <td>female</td>
-      <td>24.0</td>
-      <td>3</td>
-      <td>2</td>
-      <td>19950</td>
-      <td>263.0000</td>
-      <td>C23 C25 C27</td>
-      <td>S</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>439</td>
-      <td>0</td>
-      <td>1</td>
-      <td>Fortune, Mr. Mark</td>
-      <td>male</td>
-      <td>64.0</td>
-      <td>1</td>
-      <td>4</td>
-      <td>19950</td>
-      <td>263.0000</td>
-      <td>C23 C25 C27</td>
-      <td>S</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>312</td>
-      <td>1</td>
-      <td>1</td>
-      <td>Ryerson, Miss. Emily Borie</td>
-      <td>female</td>
-      <td>18.0</td>
-      <td>2</td>
-      <td>2</td>
-      <td>PC 17608</td>
-      <td>262.3750</td>
-      <td>B57 B59 B63 B66</td>
-      <td>C</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>743</td>
-      <td>1</td>
-      <td>1</td>
-      <td>"Ryerson, Miss. Susan Parker ""Suzette"""</td>
-      <td>female</td>
-      <td>21.0</td>
-      <td>2</td>
-      <td>2</td>
-      <td>PC 17608</td>
-      <td>262.3750</td>
-      <td>B57 B59 B63 B66</td>
-      <td>C</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>119</td>
-      <td>0</td>
-      <td>1</td>
-      <td>Baxter, Mr. Quigg Edmond</td>
-      <td>male</td>
-      <td>24.0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>PC 17558</td>
-      <td>247.5208</td>
-      <td>B58 B60</td>
-      <td>C</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
+    +-----------+--------+------+-----------------------------------------+------+----+-----+-----+--------+--------+---------------+--------+
+    |PassengerId|Survived|Pclass|Name                                     |Sex   |Age |SibSp|Parch|Ticket  |Fare    |Cabin          |Embarked|
+    +-----------+--------+------+-----------------------------------------+------+----+-----+-----+--------+--------+---------------+--------+
+    |680        |1       |1     |Cardeza, Mr. Thomas Drake Martinez       |male  |36.0|0    |1    |PC 17755|512.3292|B51 B53 B55    |C       |
+    |259        |1       |1     |Ward, Miss. Anna                         |female|35.0|0    |0    |PC 17755|512.3292|NULL           |C       |
+    |738        |1       |1     |Lesurer, Mr. Gustave J                   |male  |35.0|0    |0    |PC 17755|512.3292|B101           |C       |
+    |89         |1       |1     |Fortune, Miss. Mabel Helen               |female|23.0|3    |2    |19950   |263.0   |C23 C25 C27    |S       |
+    |28         |0       |1     |Fortune, Mr. Charles Alexander           |male  |19.0|3    |2    |19950   |263.0   |C23 C25 C27    |S       |
+    |342        |1       |1     |Fortune, Miss. Alice Elizabeth           |female|24.0|3    |2    |19950   |263.0   |C23 C25 C27    |S       |
+    |439        |0       |1     |Fortune, Mr. Mark                        |male  |64.0|1    |4    |19950   |263.0   |C23 C25 C27    |S       |
+    |312        |1       |1     |Ryerson, Miss. Emily Borie               |female|18.0|2    |2    |PC 17608|262.375 |B57 B59 B63 B66|C       |
+    |743        |1       |1     |"Ryerson, Miss. Susan Parker ""Suzette"""|female|21.0|2    |2    |PC 17608|262.375 |B57 B59 B63 B66|C       |
+    |119        |0       |1     |Baxter, Mr. Quigg Edmond                 |male  |24.0|0    |1    |PC 17558|247.5208|B58 B60        |C       |
+    +-----------+--------+------+-----------------------------------------+------+----+-----+-----+--------+--------+---------------+--------+
+    
 
 
 Similarly we can also register another sql temp view. 
@@ -805,7 +740,7 @@ Similarly we can also register another sql temp view.
 df_test.createOrReplaceTempView("df_test")
 ```
 
-Now that we have registered two tables with in this spark session, wondering how we can see which once are registered?
+Now that we have registered two tables within this spark session, wondering how we can see which once are registered?
 
 
 ```python
@@ -832,6 +767,21 @@ spark.sql("SHOW views").show()
     |         | df_test|       true|
     |         | mytable|       true|
     +---------+--------+-----------+
+    
+
+
+
+```python
+# or 
+spark.sql("SHOW tables").show()
+```
+
+    +---------+---------+-----------+
+    |namespace|tableName|isTemporary|
+    +---------+---------+-----------+
+    |         |  df_test|       true|
+    |         |  mytable|       true|
+    +---------+---------+-----------+
     
 
 
@@ -898,6 +848,7 @@ df_train['Age']
 
 
 ```python
+# similarly 
 df_train.Age
 ```
 
@@ -926,6 +877,40 @@ type(df_train['Age'])
 # Yes, in order to get a column we need to use select().  
 # df.select(df['Age']).show()
 df_train.select('Age').show()
+```
+
+    +----+
+    | Age|
+    +----+
+    |22.0|
+    |38.0|
+    |26.0|
+    |35.0|
+    |35.0|
+    |NULL|
+    |54.0|
+    | 2.0|
+    |27.0|
+    |14.0|
+    | 4.0|
+    |58.0|
+    |20.0|
+    |39.0|
+    |14.0|
+    |55.0|
+    | 2.0|
+    |NULL|
+    |31.0|
+    |NULL|
+    +----+
+    only showing top 20 rows
+    
+
+
+
+```python
+# similarly...
+df_train[['Age']].show()
 ```
 
     +----+
@@ -1165,129 +1150,24 @@ row.asDict()['Name']
 ```python
 ## let's say we want to change the name of a column. we can use withColumnRenamed
 # df.withColumnRenamed('exsisting name', 'anticipated name');
-df_train.withColumnRenamed("Age", "newA").limit(5).toPandas()
+df_train.withColumnRenamed("Age", "newA").limit(5).show()
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>PassengerId</th>
-      <th>Survived</th>
-      <th>Pclass</th>
-      <th>Name</th>
-      <th>Sex</th>
-      <th>newA</th>
-      <th>SibSp</th>
-      <th>Parch</th>
-      <th>Ticket</th>
-      <th>Fare</th>
-      <th>Cabin</th>
-      <th>Embarked</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>0</td>
-      <td>3</td>
-      <td>Braund, Mr. Owen Harris</td>
-      <td>male</td>
-      <td>22.0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>A/5 21171</td>
-      <td>7.2500</td>
-      <td>None</td>
-      <td>S</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>1</td>
-      <td>1</td>
-      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
-      <td>female</td>
-      <td>38.0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>PC 17599</td>
-      <td>71.2833</td>
-      <td>C85</td>
-      <td>C</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>1</td>
-      <td>3</td>
-      <td>Heikkinen, Miss. Laina</td>
-      <td>female</td>
-      <td>26.0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>STON/O2. 3101282</td>
-      <td>7.9250</td>
-      <td>None</td>
-      <td>S</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>1</td>
-      <td>1</td>
-      <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>
-      <td>female</td>
-      <td>35.0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>113803</td>
-      <td>53.1000</td>
-      <td>C123</td>
-      <td>S</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>5</td>
-      <td>0</td>
-      <td>3</td>
-      <td>Allen, Mr. William Henry</td>
-      <td>male</td>
-      <td>35.0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>373450</td>
-      <td>8.0500</td>
-      <td>None</td>
-      <td>S</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
+    +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+    |PassengerId|Survived|Pclass|                Name|   Sex|newA|SibSp|Parch|          Ticket|   Fare|Cabin|Embarked|
+    +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+    |          1|       0|     3|Braund, Mr. Owen ...|  male|22.0|    1|    0|       A/5 21171|   7.25| NULL|       S|
+    |          2|       1|     1|Cumings, Mrs. Joh...|female|38.0|    1|    0|        PC 17599|71.2833|  C85|       C|
+    |          3|       1|     3|Heikkinen, Miss. ...|female|26.0|    0|    0|STON/O2. 3101282|  7.925| NULL|       S|
+    |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|          113803|   53.1| C123|       S|
+    |          5|       0|     3|Allen, Mr. Willia...|  male|35.0|    0|    0|          373450|   8.05| NULL|       S|
+    +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
+    
 
 
 
 ```python
-# Let's say we want to modify a column, for example, add in this case, adding $20 with every fare. 
+# Let's say we want to modify a column, for example, add in this case; adding $20 with every fare. 
 ## df.withColumn('existing column', 'calculation with the column(we have to put df not just column)')
 ## so not df.withColumn('Fare', 'Fare' +20).show()
 df_train.withColumn('Fare', df_train['Fare']+20).limit(5).show()
@@ -4123,8 +4003,6 @@ df2 = spark.createDataFrame([("a", 1),("a", 1), ("b", 3)], ["C1", "C2"])
 df1.show()
 ```
 
-                                                                                    
-
     +---+---+
     | C1| C2|
     +---+---+
@@ -5314,7 +5192,7 @@ df_train.groupBy(['Sex', 'Pclass']).count().show()
 df_train.hint("broadcast").show()
 ```
 
-    23/10/26 20:23:34 WARN HintErrorLogger: A join hint (strategy=broadcast) is specified but it is not part of a join relation.
+    24/05/30 18:56:29 WARN HintErrorLogger: A join hint (strategy=broadcast) is specified but it is not part of a join relation.
 
 
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+------------------+----------+
@@ -5369,26 +5247,26 @@ df_train.sort('Survived', ascending = False).show()
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+---------------+----------+
     |PassengerId|Survived|Pclass|                Name|   Sex| Age|SibSp|Parch|   Fare|Cabin|Embarked|name_length|nLength_group| title|family_size|family_group|is_alone|calculated_fare|fare_group|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+---------------+----------+
-    |        124|       1|     2| Webber, Miss. Susan|female|32.5|    0|    0|   13.0|    E|       S|         19|        short|  Miss|          0|       loner|       1|           13.0|       mid|
     |         33|       1|     3|Glynn, Miss. Mary...|female|NULL|    0|    0|   7.75|    G|       Q|         24|       medium|  Miss|          0|       loner|       1|           7.75|       low|
-    |        299|       1|     1|Saalfeld, Mr. Ado...|  male|NULL|    0|    0|   30.5|    C|       S|         21|       medium|    Mr|          0|       loner|       1|           30.5|      high|
+    |        124|       1|     2| Webber, Miss. Susan|female|32.5|    0|    0|   13.0|    E|       S|         19|        short|  Miss|          0|       loner|       1|           13.0|       mid|
     |        108|       1|     3|Moss, Mr. Albert ...|  male|NULL|    0|    0|  7.775|    G|       S|         22|       medium|    Mr|          0|       loner|       1|          7.775|       low|
-    |        129|       1|     3|   Peter, Miss. Anna|female|NULL|    1|    1|22.3583|    F|       C|         17|        short|  Miss|          2|       small|       0|       11.17915|      high|
+    |        299|       1|     1|Saalfeld, Mr. Ado...|  male|NULL|    0|    0|   30.5|    C|       S|         21|       medium|    Mr|          0|       loner|       1|           30.5|      high|
     |         37|       1|     3|    Mamee, Mr. Hanna|  male|NULL|    0|    0| 7.2292|    G|       C|         16|        short|    Mr|          0|       loner|       1|         7.2292|       low|
-    |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|   53.1|    C|       S|         44|         good|   Mrs|          1|       loner|       1|           53.1| very_high|
+    |        129|       1|     3|   Peter, Miss. Anna|female|NULL|    1|    1|22.3583|    F|       C|         17|        short|  Miss|          2|       small|       0|       11.17915|      high|
     |          3|       1|     3|Heikkinen, Miss. ...|female|26.0|    0|    0|  7.925|    G|       S|         22|       medium|  Miss|          0|       loner|       1|          7.925|       low|
-    |        137|       1|     1|Newsom, Miss. Hel...|female|19.0|    0|    2|26.2833|    D|       S|         28|       medium|  Miss|          2|       small|       0|       13.14165|      high|
+    |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|   53.1|    C|       S|         44|         good|   Mrs|          1|       loner|       1|           53.1| very_high|
     |         40|       1|     3|Nicola-Yarred, Mi...|female|14.0|    1|    0|11.2417|    G|       C|         27|       medium|  Miss|          1|       loner|       1|        11.2417|       mid|
-    |         11|       1|     3|Sandstrom, Miss. ...|female| 4.0|    1|    1|   16.7|    G|       S|         31|       medium|  Miss|          2|       small|       0|           8.35|       mid|
+    |        137|       1|     1|Newsom, Miss. Hel...|female|19.0|    0|    2|26.2833|    D|       S|         28|       medium|  Miss|          2|       small|       0|       13.14165|      high|
     |         57|       1|     2|   Rugg, Miss. Emily|female|21.0|    0|    0|   10.5|    G|       S|         17|        short|  Miss|          0|       loner|       1|           10.5|       mid|
-    |        152|       1|     1|Pears, Mrs. Thoma...|female|22.0|    1|    0|   66.6|    C|       S|         33|       medium|   Mrs|          1|       loner|       1|           66.6| very_high|
+    |         11|       1|     3|Sandstrom, Miss. ...|female| 4.0|    1|    1|   16.7|    G|       S|         31|       medium|  Miss|          2|       small|       0|           8.35|       mid|
     |         59|       1|     2|West, Miss. Const...|female| 5.0|    1|    2|  27.75|    T|       S|         28|       medium|  Miss|          3|       small|       0|           9.25|      high|
-    |         22|       1|     2|Beesley, Mr. Lawr...|  male|34.0|    0|    0|   13.0|    D|       S|         21|       medium|    Mr|          0|       loner|       1|           13.0|       mid|
+    |        152|       1|     1|Pears, Mrs. Thoma...|female|22.0|    1|    0|   66.6|    C|       S|         33|       medium|   Mrs|          1|       loner|       1|           66.6| very_high|
     |          9|       1|     3|Johnson, Mrs. Osc...|female|27.0|    0|    2|11.1333|    G|       S|         49|         long|   Mrs|          2|       small|       0|        5.56665|       mid|
-    |        167|       1|     1|Chibnall, Mrs. (E...|female|NULL|    0|    1|   55.0|    E|       S|         38|         good|   Mrs|          1|       loner|       1|           55.0| very_high|
+    |         22|       1|     2|Beesley, Mr. Lawr...|  male|34.0|    0|    0|   13.0|    D|       S|         21|       medium|    Mr|          0|       loner|       1|           13.0|       mid|
     |         66|       1|     3|Moubarek, Master....|  male|NULL|    1|    1|15.2458|    G|       C|         24|       medium|Master|          2|       small|       0|         7.6229|       mid|
-    |        195|       1|     1|Brown, Mrs. James...|female|44.0|    0|    0|27.7208|    B|       C|         41|         good|   Mrs|          0|       loner|       1|        27.7208|      high|
+    |        167|       1|     1|Chibnall, Mrs. (E...|female|NULL|    0|    1|   55.0|    E|       S|         38|         good|   Mrs|          1|       loner|       1|           55.0| very_high|
     |         16|       1|     2|Hewlett, Mrs. (Ma...|female|55.0|    0|    0|   16.0|    F|       S|         32|       medium|   Mrs|          0|       loner|       1|           16.0|       mid|
+    |        195|       1|     1|Brown, Mrs. James...|female|44.0|    0|    0|27.7208|    B|       C|         41|         good|   Mrs|          0|       loner|       1|        27.7208|      high|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+---------------+----------+
     only showing top 20 rows
     
@@ -5748,13 +5626,3 @@ df_train.printSchema()
      |-- fare_group: string (nullable = true)
     
 
-
-
-```python
-
-```
-
-
-```python
-
-```
