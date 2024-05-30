@@ -1,27 +1,28 @@
-![plot](../images/titanic-submersible-oceangate-illustration-andrea-gatti.jpg)
+![plot](./images/titanic-submersible-oceangate-illustration-andrea-gatti.jpg)
 
-
-This kernel will give a tutorial for starting out with PySpark using Titanic dataset. Let's get started. 
-
+This kernel will give a tutorial for starting out with PySpark using Titanic dataset. Let's get started.
 
 ### Kernel Goals
+
 <a id="aboutthiskernel"></a>
-***
+
+---
+
 There are three primary goals of this kernel.
+
 - <b>Provide a tutorial for someone who is starting out with pyspark.
-- <b>Do an exploratory data analysis(EDA)</b> of titanic with visualizations and storytelling.  
+- <b>Do an exploratory data analysis(EDA)</b> of titanic with visualizations and storytelling.
 - <b>Predict</b>: Use machine learning classification models to predict the chances of passengers survival.
 
 ### What is Spark, anyway?
+
 Spark is a platform for cluster computing. Spark lets us spread data and computations over clusters with multiple nodes (think of each node as a separate computer). Splitting up data makes it easier to work with very large datasets because each node only works with a small amount of data.
 As each node works on its own subset of the total data, it also carries out a part of the total calculations required, so that both data processing and computation are performed in parallel over the nodes in the cluster. It is a fact that parallel computation can make certain types of programming tasks much faster.
 
 Deciding whether or not Spark is the best solution for your problem takes some experience, but you can consider questions like:
-* Is my data too big to work with on a single machine?
-* Can my calculations be easily parallelized?
 
-
-
+- Is my data too big to work with on a single machine?
+- Can my calculations be easily parallelized?
 
 ```python
 # This Python 3 environment comes with many helpful analytics libraries installed
@@ -39,14 +40,12 @@ for dirname, _, filenames in os.walk('../input'):
     for filename in filenames:
         print(os.path.join(dirname, filename))
 
-# You can write up to 5GB to the current directory (/kaggle/working/) that gets preserved as output when you create a version using "Save & Run All" 
+# You can write up to 5GB to the current directory (/kaggle/working/) that gets preserved as output when you create a version using "Save & Run All"
 # You can also write temporary files to /kaggle/temp/, but they won't be saved outside of the current session
 ```
 
     ../input/titanic/test.csv
     ../input/titanic/train.csv
-
-
 
 ```python
 ## installing pyspark
@@ -56,14 +55,13 @@ for dirname, _, filenames in os.walk('../input'):
     Requirement already satisfied: pyspark in /Users/masumrumi/.local/share/virtualenvs/pyspark_titanic-AKXOLEKJ/lib/python3.11/site-packages (3.5.1)
     Requirement already satisfied: py4j==0.10.9.7 in /Users/masumrumi/.local/share/virtualenvs/pyspark_titanic-AKXOLEKJ/lib/python3.11/site-packages (from pyspark) (0.10.9.7)
 
-
 The first step in using Spark is connecting to a cluster. In practice, the cluster will be hosted on a remote machine that's connected to all other nodes. There will be one computer, called the master that manages splitting up the data and the computations. The master is connected to the rest of the computers in the cluster, which are called worker. The master sends the workers data and calculations to run, and they send their results back to the master.
 
-We definitely don't need may clusters for Titanic dataset. In addition to that, the syntax for running locally or using many clusters are pretty similar. To start working with Spark DataFrames, we first have to create a SparkSession object from SparkContext. We can think of the SparkContext as the connection to the cluster and SparkSession as the interface with that connection. Let's create a SparkSession. 
+We definitely don't need may clusters for Titanic dataset. In addition to that, the syntax for running locally or using many clusters are pretty similar. To start working with Spark DataFrames, we first have to create a SparkSession object from SparkContext. We can think of the SparkContext as the connection to the cluster and SparkSession as the interface with that connection. Let's create a SparkSession.
 
 # Beginner Tutorial
-This part is solely for beginners. I recommend starting from here to get a good understanding of the flow. 
 
+This part is solely for beginners. I recommend starting from here to get a good understanding of the flow.
 
 ```python
 ## creating a spark session
@@ -71,35 +69,26 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName('tutorial').getOrCreate()
 ```
 
-Let's read the dataset. 
-
+Let's read the dataset.
 
 ```python
 df_train = spark.read.csv('../input/titanic/train.csv', header = True, inferSchema=True)
 df_test = spark.read.csv('../input/titanic/test.csv', header = True, inferSchema=True)
 ```
 
-
 ```python
 titanic_train = df_train.alias("titanic_train")
 ```
-
 
 ```python
 ## So, what is df_train?
 type(df_train)
 ```
 
-
-
-
     pyspark.sql.dataframe.DataFrame
 
-
-
-
 ```python
-## As you can see it's a Spark dataframe. Let's take a look at the preview of the dataset. 
+## As you can see it's a Spark dataframe. Let's take a look at the preview of the dataset.
 df_train.show(truncate=False)
 ```
 
@@ -128,17 +117,11 @@ df_train.show(truncate=False)
     |20         |1       |3     |Masselmani, Mrs. Fatima                                |female|NULL|0    |0    |2649            |7.225  |NULL |C       |
     +-----------+--------+------+-------------------------------------------------------+------+----+-----+-----+----------------+-------+-----+--------+
     only showing top 20 rows
-    
-
-
 
 ```python
-## It looks a bit messi. See what I did there? ;). Anyway, how about using .toPandas() for change. 
+## It looks a bit messi. See what I did there? ;). Anyway, how about using .toPandas() for change.
 df_train.toPandas()
 ```
-
-
-
 
 <div>
 <style scoped>
@@ -153,6 +136,7 @@ df_train.toPandas()
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -343,24 +327,17 @@ df_train.toPandas()
 <p>891 rows × 12 columns</p>
 </div>
 
-
-
-
 ```python
-## how about a summary. 
+## how about a summary.
 result = df_train.describe().toPandas()
 ```
 
     24/05/30 18:55:58 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
-                                                                                    
 
 
 ```python
 result
 ```
-
-
-
 
 <div>
 <style scoped>
@@ -375,6 +352,7 @@ result
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -480,24 +458,15 @@ result
 </table>
 </div>
 
-
-
-
 ```python
 # getting the total row count
 df_train.count()
 ```
 
-
-
-
     891
 
-
-
-
 ```python
-# We can also convert a pandas dataframe to spark dataframe. Here is how we do it. 
+# We can also convert a pandas dataframe to spark dataframe. Here is how we do it.
 print(f"Before: {type(result)}")
 spark_temp = spark.createDataFrame(result)
 print(f"After: {type(spark_temp)}")
@@ -506,14 +475,10 @@ print(f"After: {type(spark_temp)}")
     Before: <class 'pandas.core.frame.DataFrame'>
     After: <class 'pyspark.sql.dataframe.DataFrame'>
 
-
-
 ```python
 # pyspark version
 spark_temp.show()
 ```
-
-                                                                                    
 
     +-------+-----------------+-------------------+------------------+--------------------+------+------------------+------------------+-------------------+------------------+-----------------+-----+--------+
     |summary|      PassengerId|           Survived|            Pclass|                Name|   Sex|               Age|             SibSp|              Parch|            Ticket|             Fare|Cabin|Embarked|
@@ -524,17 +489,11 @@ spark_temp.show()
     |    min|                1|                  0|                 1|"Andersson, Mr. A...|female|              0.42|                 0|                  0|            110152|              0.0|  A10|       C|
     |    max|              891|                  1|                 3|van Melkebeke, Mr...|  male|              80.0|                 8|                  6|         WE/P 5735|         512.3292|    T|       S|
     +-------+-----------------+-------------------+------------------+--------------------+------+------------------+------------------+-------------------+------------------+-----------------+-----+--------+
-    
-
-
 
 ```python
 # pandas version
 result
 ```
-
-
-
 
 <div>
 <style scoped>
@@ -549,6 +508,7 @@ result
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -653,9 +613,6 @@ result
   </tbody>
 </table>
 </div>
-
-
-
 
 ```python
 # Cool, Let's print the schema of the df using .printSchema()
@@ -675,17 +632,11 @@ df_train.printSchema()
      |-- Fare: double (nullable = true)
      |-- Cabin: string (nullable = true)
      |-- Embarked: string (nullable = true)
-    
-
-
 
 ```python
 # similar approach
 df_train.dtypes
 ```
-
-
-
 
     [('PassengerId', 'int'),
      ('Survived', 'int'),
@@ -700,18 +651,15 @@ df_train.dtypes
      ('Cabin', 'string'),
      ('Embarked', 'string')]
 
+The data in the real world is not this clean. We often have to create our own schema and implement it. We will describe more about it in the future. Since we are talking about schema, are you wondering if you would be able to implement sql with Spark?. Yes, you can.
 
-
-The data in the real world is not this clean. We often have to create our own schema and implement it. We will describe more about it in the future. Since we are talking about schema, are you wondering if you would be able to implement sql with Spark?. Yes, you can. 
-
-One of the best advantage of Spark is that you can run sql commands to do analysis. If you are like that nifty co-worker of mine, you would probably want to use sql with spark. Let's do an example. 
-
+One of the best advantage of Spark is that you can run sql commands to do analysis. If you are like that nifty co-worker of mine, you would probably want to use sql with spark. Let's do an example.
 
 ```python
 ## First, we need to register a sql temporary view.
 df_train.createOrReplaceTempView("mytable");
 
-## Then, we use spark.sql and write sql inside it, which returns a spark Dataframe.  
+## Then, we use spark.sql and write sql inside it, which returns a spark Dataframe.
 result = spark.sql("SELECT * FROM mytable ORDER BY Fare DESC LIMIT 10")
 result.show(truncate=False)
 ```
@@ -730,11 +678,8 @@ result.show(truncate=False)
     |743        |1       |1     |"Ryerson, Miss. Susan Parker ""Suzette"""|female|21.0|2    |2    |PC 17608|262.375 |B57 B59 B63 B66|C       |
     |119        |0       |1     |Baxter, Mr. Quigg Edmond                 |male  |24.0|0    |1    |PC 17558|247.5208|B58 B60        |C       |
     +-----------+--------+------+-----------------------------------------+------+----+-----+-----+--------+--------+---------------+--------+
-    
 
-
-Similarly we can also register another sql temp view. 
-
+Similarly we can also register another sql temp view.
 
 ```python
 df_test.createOrReplaceTempView("df_test")
@@ -742,19 +687,12 @@ df_test.createOrReplaceTempView("df_test")
 
 Now that we have registered two tables within this spark session, wondering how we can see which once are registered?
 
-
 ```python
 spark.catalog.listTables()
 ```
 
-
-
-
     [Table(name='df_test', catalog=None, namespace=[], description=None, tableType='TEMPORARY', isTemporary=True),
      Table(name='mytable', catalog=None, namespace=[], description=None, tableType='TEMPORARY', isTemporary=True)]
-
-
-
 
 ```python
 # similarly
@@ -767,12 +705,9 @@ spark.sql("SHOW views").show()
     |         | df_test|       true|
     |         | mytable|       true|
     +---------+--------+-----------+
-    
-
-
 
 ```python
-# or 
+# or
 spark.sql("SHOW tables").show()
 ```
 
@@ -782,9 +717,6 @@ spark.sql("SHOW tables").show()
     |         |  df_test|       true|
     |         |  mytable|       true|
     +---------+---------+-----------+
-    
-
-
 
 ```python
 # We can also create spark dataframe out of these tables using spark.table
@@ -804,19 +736,13 @@ temp_table.show(5)
     |        896|     3|Hirvonen, Mrs. Al...|female|22.0|    1|    1|3101298|12.2875| NULL|       S|
     +-----------+------+--------------------+------+----+-----+-----+-------+-------+-----+--------+
     only showing top 5 rows
-    
-
-
 
 ```python
-# pretty cool, We will dive deep in sql later. 
-# Let's go back to dataFrame and do some nitty-gritty stuff. 
-# What if want the column names only. 
+# pretty cool, We will dive deep in sql later.
+# Let's go back to dataFrame and do some nitty-gritty stuff.
+# What if want the column names only.
 df_train.columns
 ```
-
-
-
 
     ['PassengerId',
      'Survived',
@@ -831,50 +757,29 @@ df_train.columns
      'Cabin',
      'Embarked']
 
-
-
-
 ```python
 # What about just a column?
 df_train['Age']
 ```
 
-
-
-
     Column<'Age'>
 
-
-
-
 ```python
-# similarly 
+# similarly
 df_train.Age
 ```
 
-
-
-
     Column<'Age'>
-
-
-
 
 ```python
 type(df_train['Age'])
 ```
 
-
-
-
     pyspark.sql.column.Column
 
-
-
-
 ```python
-# Well, that's not what we pandas users have expected. 
-# Yes, in order to get a column we need to use select().  
+# Well, that's not what we pandas users have expected.
+# Yes, in order to get a column we need to use select().
 # df.select(df['Age']).show()
 df_train.select('Age').show()
 ```
@@ -904,9 +809,6 @@ df_train.select('Age').show()
     |NULL|
     +----+
     only showing top 20 rows
-    
-
-
 
 ```python
 # similarly...
@@ -938,9 +840,6 @@ df_train[['Age']].show()
     |NULL|
     +----+
     only showing top 20 rows
-    
-
-
 
 ```python
 ## What if we want multiple columns?
@@ -972,12 +871,9 @@ df_train.select(['Age', 'Fare']).show()
     |NULL|  7.225|
     +----+-------+
     only showing top 20 rows
-    
-
-
 
 ```python
-# similarly 
+# similarly
 df_train[['Age', 'Fare']].show()
 ```
 
@@ -1006,13 +902,10 @@ df_train[['Age', 'Fare']].show()
     |NULL|  7.225|
     +----+-------+
     only showing top 20 rows
-    
-
-
 
 ```python
-# or 
-df_train[df_train.Age, 
+# or
+df_train[df_train.Age,
          df_train.Fare].show()
 ```
 
@@ -1041,35 +934,20 @@ df_train[df_train.Age,
     |NULL|  7.225|
     +----+-------+
     only showing top 20 rows
-    
 
-
-As you can see pyspark dataframe syntax is pretty simple with a lot of ways to implement. Which syntex is best implemented depends on what we are trying to accomplish. I will discuss more on this as we go on. Now let's see how we can access a row. 
-
+As you can see pyspark dataframe syntax is pretty simple with a lot of ways to implement. Which syntex is best implemented depends on what we are trying to accomplish. I will discuss more on this as we go on. Now let's see how we can access a row.
 
 ```python
 df_train.head(1)
 ```
 
-
-
-
     [Row(PassengerId=1, Survived=0, Pclass=3, Name='Braund, Mr. Owen Harris', Sex='male', Age=22.0, SibSp=1, Parch=0, Ticket='A/5 21171', Fare=7.25, Cabin=None, Embarked='S')]
-
-
-
 
 ```python
 type(df_train.head(1))
 ```
 
-
-
-
     list
-
-
-
 
 ```python
 ## returns a list. let's get the item in the list
@@ -1077,33 +955,18 @@ row = df_train.head(1)[0]
 row
 ```
 
-
-
-
     Row(PassengerId=1, Survived=0, Pclass=3, Name='Braund, Mr. Owen Harris', Sex='male', Age=22.0, SibSp=1, Parch=0, Ticket='A/5 21171', Fare=7.25, Cabin=None, Embarked='S')
-
-
-
 
 ```python
 type(row)
 ```
 
-
-
-
     pyspark.sql.types.Row
-
-
-
 
 ```python
 ## row can be converted into dict using .asDict()
 row.asDict()
 ```
-
-
-
 
     {'PassengerId': 1,
      'Survived': 0,
@@ -1118,34 +981,19 @@ row.asDict()
      'Cabin': None,
      'Embarked': 'S'}
 
-
-
-
 ```python
-## Then the value can be accessed from the row dictionaly. 
+## Then the value can be accessed from the row dictionaly.
 row.asDict()['PassengerId']
 ```
 
-
-
-
     1
-
-
-
 
 ```python
 ## similarly
 row.asDict()['Name']
 ```
 
-
-
-
     'Braund, Mr. Owen Harris'
-
-
-
 
 ```python
 ## let's say we want to change the name of a column. we can use withColumnRenamed
@@ -1162,12 +1010,9 @@ df_train.withColumnRenamed("Age", "newA").limit(5).show()
     |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|          113803|   53.1| C123|       S|
     |          5|       0|     3|Allen, Mr. Willia...|  male|35.0|    0|    0|          373450|   8.05| NULL|       S|
     +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
-    
-
-
 
 ```python
-# Let's say we want to modify a column, for example, add in this case; adding $20 with every fare. 
+# Let's say we want to modify a column, for example, add in this case; adding $20 with every fare.
 ## df.withColumn('existing column', 'calculation with the column(we have to put df not just column)')
 ## so not df.withColumn('Fare', 'Fare' +20).show()
 df_train.withColumn('Fare', df_train['Fare']+20).limit(5).show()
@@ -1182,11 +1027,8 @@ df_train.withColumn('Fare', df_train['Fare']+20).limit(5).show()
     |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|          113803|   73.1| C123|       S|
     |          5|       0|     3|Allen, Mr. Willia...|  male|35.0|    0|    0|          373450|  28.05| NULL|       S|
     +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
-    
 
-
-Now this change isn't permanent since we are not assigning it to any variables. 
-
+Now this change isn't permanent since we are not assigning it to any variables.
 
 ```python
 ## let's say we want to get the average fare.
@@ -1195,40 +1037,27 @@ Now this change isn't permanent since we are not assigning it to any variables.
 # collect returns a list so we need to get the value from the list using index
 ```
 
-
 ```python
 from pyspark.sql.functions import mean
 fare_mean = df_train.select(mean("Fare")).collect()
 fare_mean[0][0]
 ```
 
-
-
-
     32.2042079685746
-
-
-
 
 ```python
 fare_mean = fare_mean[0][0]
 fare_mean
 ```
 
-
-
-
     32.2042079685746
-
-
 
 #### Filter
 
-
 ```python
-# What if we want to filter data and see all fare above average. 
+# What if we want to filter data and see all fare above average.
 # there are two approaches of this, we can use sql syntex/passing a string
-# or just dataframe approach. 
+# or just dataframe approach.
 df_train.filter("Fare > 32.20" ).limit(3).show()
 ```
 
@@ -1239,12 +1068,9 @@ df_train.filter("Fare > 32.20" ).limit(3).show()
     |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|  113803|   53.1| C123|       S|
     |          7|       0|     1|McCarthy, Mr. Tim...|  male|54.0|    0|    0|   17463|51.8625|  E46|       S|
     +-----------+--------+------+--------------------+------+----+-----+-----+--------+-------+-----+--------+
-    
-
-
 
 ```python
-# similarly 
+# similarly
 df_train[df_train.Fare > 32.20].limit(3).show()
 ```
 
@@ -1255,9 +1081,6 @@ df_train[df_train.Fare > 32.20].limit(3).show()
     |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|  113803|   53.1| C123|       S|
     |          7|       0|     1|McCarthy, Mr. Tim...|  male|54.0|    0|    0|   17463|51.8625|  E46|       S|
     +-----------+--------+------+--------------------+------+----+-----+-----+--------+-------+-----+--------+
-    
-
-
 
 ```python
 # or we can use the dataframe approach
@@ -1271,9 +1094,6 @@ df_train.filter(df_train['Fare'] > fare_mean).limit(3).show()
     |          4|       1|     1|Futrelle, Mrs. Ja...|female|35.0|    1|    0|  113803|   53.1| C123|       S|
     |          7|       0|     1|McCarthy, Mr. Tim...|  male|54.0|    0|    0|   17463|51.8625|  E46|       S|
     +-----------+--------+------+--------------------+------+----+-----+-----+--------+-------+-----+--------+
-    
-
-
 
 ```python
 ## What if we want to filter by multiple columns.
@@ -1294,13 +1114,10 @@ temp_df.show(5)
     |         13|       0|     3|Saundercock, Mr. ...|male|20.0|    0|    0|A/5. 2151|  8.05| NULL|       S|
     +-----------+--------+------+--------------------+----+----+-----+-----+---------+------+-----+--------+
     only showing top 5 rows
-    
-
-
 
 ```python
-# similarly 
-df_train[(df_train.Fare < fare_mean) & 
+# similarly
+df_train[(df_train.Fare < fare_mean) &
          (df_train.Sex == "male")].show(5)
 ```
 
@@ -1314,9 +1131,6 @@ df_train[(df_train.Fare < fare_mean) &
     |         13|       0|     3|Saundercock, Mr. ...|male|20.0|    0|    0|A/5. 2151|  8.05| NULL|       S|
     +-----------+--------+------+--------------------+----+----+-----+-----+---------+------+-----+--------+
     only showing top 5 rows
-    
-
-
 
 ```python
 # passenger with below average fare and are not male
@@ -1341,9 +1155,6 @@ df_train.filter((filter1_less_than_mean_fare) &
     |         23|       1|     3|"McGowan, Miss. A...|female|15.0|    0|    0|          330923| 8.0292| NULL|       Q|
     +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
     only showing top 10 rows
-    
-
-
 
 ```python
 # We can also apply it this way
@@ -1370,9 +1181,6 @@ df_train.filter(filter1_less_than_mean_fare).filter(filter2_sex_not_male).show(1
     |         23|       1|     3|"McGowan, Miss. A...|female|15.0|    0|    0|          330923| 8.0292| NULL|       Q|
     +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
     only showing top 10 rows
-    
-
-
 
 ```python
 # we can also filter by using builtin functions.
@@ -1405,9 +1213,6 @@ df_train.select("PassengerId", "Fare").filter(df_train.Fare.between(10,40)).show
     |         42|   21.0|
     +-----------+-------+
     only showing top 20 rows
-    
-
-
 
 ```python
 df_train.select("PassengerID", df_train.Fare.between(10,40)).show()
@@ -1438,9 +1243,6 @@ df_train.select("PassengerID", df_train.Fare.between(10,40)).show()
     |         20|                          false|
     +-----------+-------------------------------+
     only showing top 20 rows
-    
-
-
 
 ```python
 # contains
@@ -1472,12 +1274,9 @@ df_train.select("PassengerId", "Name").filter(df_train.Name.contains("Mr")).show
     |         28|Fortune, Mr. Char...|
     +-----------+--------------------+
     only showing top 20 rows
-    
-
-
 
 ```python
-# startswith 
+# startswith
 df_train.select("PassengerID", 'Sex').filter(df_train.Sex.startswith("fe")).show()
 ```
 
@@ -1506,9 +1305,6 @@ df_train.select("PassengerID", 'Sex').filter(df_train.Sex.startswith("fe")).show
     |         41|female|
     +-----------+------+
     only showing top 20 rows
-    
-
-
 
 ```python
 # endswith
@@ -1532,9 +1328,6 @@ df_train.select("PassengerID", 'Ticket').filter(df_train.Ticket.endswith("50")).
     |        768|    364850|
     |        807|    112050|
     +-----------+----------+
-    
-
-
 
 ```python
 # isin
@@ -1548,9 +1341,6 @@ df_train[df_train.PassengerId.isin([1,2,3])].show()
     |          2|       1|     1|Cumings, Mrs. Joh...|female|38.0|    1|    0|        PC 17599|71.2833|  C85|       C|
     |          3|       1|     3|Heikkinen, Miss. ...|female|26.0|    0|    0|STON/O2. 3101282|  7.925| NULL|       S|
     +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
-    
-
-
 
 ```python
 # like
@@ -1570,9 +1360,6 @@ df_train[df_train.Name.like("Br%")].show()
     |        729|       0|     2|Bryhl, Mr. Kurt A...|  male|25.0|    1|    0|   236853|   26.0| NULL|       S|
     |        767|       0|     1|Brewe, Dr. Arthur...|  male|NULL|    0|    0|   112379|   39.6| NULL|       C|
     +-----------+--------+------+--------------------+------+----+-----+-----+---------+-------+-----+--------+
-    
-
-
 
 ```python
 # substr
@@ -1604,12 +1391,9 @@ df_train.select(df_train.Name.substr(1,5)).show()
     |                Masse|
     +---------------------+
     only showing top 20 rows
-    
-
-
 
 ```python
-# similarly 
+# similarly
 df_train[[df_train.Name.substr(1,5)]].show()
 ```
 
@@ -1638,11 +1422,8 @@ df_train[[df_train.Name.substr(1,5)]].show()
     |                Masse|
     +---------------------+
     only showing top 20 rows
-    
-
 
 One interesting thing about substr method is that we can't implement the following syntax while working with substr. This syntax is best implemented in a filter when the return values are boolean not a column.
-
 
 ```python
 # df_train[df_train.Name.substr(1,5)].show()
@@ -1650,14 +1431,10 @@ One interesting thing about substr method is that we can't implement the followi
 
 #### GroupBy
 
-
 ```python
-## Let's group by Pclass and get the average fare price per Pclass.  
+## Let's group by Pclass and get the average fare price per Pclass.
 df_train.groupBy("Pclass").mean().toPandas()
 ```
-
-
-
 
 <div>
 <style scoped>
@@ -1672,6 +1449,7 @@ df_train.groupBy("Pclass").mean().toPandas()
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -1725,9 +1503,6 @@ df_train.groupBy("Pclass").mean().toPandas()
 </table>
 </div>
 
-
-
-
 ```python
 ## let's just look at the Pclass and avg(Fare)
 df_train.groupBy("Pclass").mean().select('Pclass', 'avg(Fare)').show()
@@ -1740,9 +1515,6 @@ df_train.groupBy("Pclass").mean().select('Pclass', 'avg(Fare)').show()
     |     3|13.675550101832997|
     |     2| 20.66218315217391|
     +------+------------------+
-    
-
-
 
 ```python
 # Alternative way
@@ -1756,12 +1528,9 @@ df_train.groupBy("Pclass").mean("Fare").show()
     |     3|13.675550101832997|
     |     2| 20.66218315217391|
     +------+------------------+
-    
-
-
 
 ```python
-## What if we want just the average of all fare, we can use .agg with the dataframe. 
+## What if we want just the average of all fare, we can use .agg with the dataframe.
 df_train.agg({'Fare':'mean'}).show()
 ```
 
@@ -1770,9 +1539,6 @@ df_train.agg({'Fare':'mean'}).show()
     +----------------+
     |32.2042079685746|
     +----------------+
-    
-
-
 
 ```python
 ## another way this can be done is by importing "mean" funciton from pyspark.sql.functions
@@ -1785,12 +1551,9 @@ df_train.select(mean("Fare")).show()
     +----------------+
     |32.2042079685746|
     +----------------+
-    
-
-
 
 ```python
-## we can also combine the few previous approaches to get similar results. 
+## we can also combine the few previous approaches to get similar results.
 temp = df_train.groupBy("Pclass")
 temp.agg({"Fare": 'mean'}).show()
 ```
@@ -1802,14 +1565,11 @@ temp.agg({"Fare": 'mean'}).show()
     |     3|13.675550101832997|
     |     2| 20.66218315217391|
     +------+------------------+
-    
-
-
 
 ```python
-# What if we want to format the results. 
+# What if we want to format the results.
 # for example,
-# I want to rename the column. this will be accomplished using .alias() method.  
+# I want to rename the column. this will be accomplished using .alias() method.
 # I want to format the number with only two decimals. this can be done using "format_number"
 from pyspark.sql.functions import format_number
 temp = df_train.groupBy("Pclass")
@@ -1824,20 +1584,15 @@ temp.select('Pclass', format_number("avg(Fare)", 2).alias("average fare")).show(
     |     3|       13.68|
     |     2|       20.66|
     +------+------------+
-    
-
 
 #### OrderBy
-There are many built in functions that we can use to do orderby in spark. Let's look at some of those. 
 
+There are many built in functions that we can use to do orderby in spark. Let's look at some of those.
 
 ```python
-## What if I want to order by Fare in ascending order. 
+## What if I want to order by Fare in ascending order.
 df_train.orderBy("Fare").limit(20).toPandas()
 ```
-
-
-
 
 <div>
 <style scoped>
@@ -1852,6 +1607,7 @@ df_train.orderBy("Fare").limit(20).toPandas()
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -2176,9 +1932,6 @@ df_train.orderBy("Fare").limit(20).toPandas()
 </table>
 </div>
 
-
-
-
 ```python
 # similarly
 df_train.orderBy(df_train.Fare.asc()).show()
@@ -2209,9 +1962,6 @@ df_train.orderBy(df_train.Fare.asc()).show()
     |        819|       0|     3|Holm, Mr. John Fr...|male|43.0|    0|    0|C 7075|  6.45|       NULL|       S|
     +-----------+--------+------+--------------------+----+----+-----+-----+------+------+-----------+--------+
     only showing top 20 rows
-    
-
-
 
 ```python
 # What about descending order
@@ -2229,21 +1979,12 @@ df_train.orderBy(df_train.Fare.desc()).limit(5).show()
     |        439|       0|     1|   Fortune, Mr. Mark|  male|64.0|    1|    4|   19950|   263.0|C23 C25 C27|       S|
     |         89|       1|     1|Fortune, Miss. Ma...|female|23.0|    3|    2|   19950|   263.0|C23 C25 C27|       S|
     +-----------+--------+------+--------------------+------+----+-----+-----+--------+--------+-----------+--------+
-    
-
-
 
 ```python
 df_train.filter(df_train.Embarked.isNull()).count()
 ```
 
-
-
-
     2
-
-
-
 
 ```python
 df_train.select('PassengerID','Embarked').orderBy(df_train.Embarked.asc_nulls_first()).show()
@@ -2274,16 +2015,10 @@ df_train.select('PassengerID','Embarked').orderBy(df_train.Embarked.asc_nulls_fi
     |        129|       C|
     +-----------+--------+
     only showing top 20 rows
-    
-
-
 
 ```python
 df_train.select('PassengerID','Embarked').orderBy(df_train.Embarked.asc_nulls_last()).tail(5)
 ```
-
-
-
 
     [Row(PassengerID=887, Embarked='S'),
      Row(PassengerID=888, Embarked='S'),
@@ -2291,17 +2026,11 @@ df_train.select('PassengerID','Embarked').orderBy(df_train.Embarked.asc_nulls_la
      Row(PassengerID=62, Embarked=None),
      Row(PassengerID=830, Embarked=None)]
 
-
-
-
 ```python
-## How do we deal with missing values. 
+## How do we deal with missing values.
 # df.na.drop(how=("any"/"all"), thresh=(1,2,3,4,5...))
 df_train.na.drop(how="any").limit(5).toPandas()
 ```
-
-
-
 
 <div>
 <style scoped>
@@ -2316,6 +2045,7 @@ df_train.na.drop(how="any").limit(5).toPandas()
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -2415,80 +2145,50 @@ df_train.na.drop(how="any").limit(5).toPandas()
 </table>
 </div>
 
-
-
 # Advanced Tutorial
 
-
 ### Spark Catalog
-
 
 ```python
 # If you have used Spark for a while now, this is a good time to learn about spark Catalog.
 # you can also totally skip this section since it is totally independed of what follows.
 ```
 
-
 ```python
-# get all the databases in the database. 
+# get all the databases in the database.
 spark.catalog.listDatabases()
 ```
 
-
-
-
     [Database(name='default', catalog='spark_catalog', description='default database', locationUri='file:/Users/masumrumi/Projects/data_science/pyspark_titanic/working/spark-warehouse')]
-
-
-
 
 ```python
 # get the name of the current database
 spark.catalog.currentDatabase()
 ```
 
-
-
-
     'default'
-
-
-
 
 ```python
 ## lists tables
 spark.catalog.listTables()
 ```
 
-
-
-
     [Table(name='df_test', catalog=None, namespace=[], description=None, tableType='TEMPORARY', isTemporary=True),
      Table(name='mytable', catalog=None, namespace=[], description=None, tableType='TEMPORARY', isTemporary=True)]
-
-
-
 
 ```python
 # add a table to the catalog
 df_train.createOrReplaceTempView("df_train")
 ```
 
-
 ```python
 # list tables
 spark.catalog.listTables()
 ```
 
-
-
-
     [Table(name='df_test', catalog=None, namespace=[], description=None, tableType='TEMPORARY', isTemporary=True),
      Table(name='df_train', catalog=None, namespace=[], description=None, tableType='TEMPORARY', isTemporary=True),
      Table(name='mytable', catalog=None, namespace=[], description=None, tableType='TEMPORARY', isTemporary=True)]
-
-
-
 
 ```python
 # Caching
@@ -2496,108 +2196,66 @@ spark.catalog.listTables()
 spark.catalog.cacheTable("df_train")
 ```
 
-
 ```python
 # checks if the table is cached
 spark.catalog.isCached("df_train")
 ```
 
-
-
-
     True
-
-
-
 
 ```python
 spark.catalog.isCached("df_test")
 ```
 
-
-
-
     False
-
-
-
 
 ```python
 # lets cahche df_test as well
 spark.catalog.cacheTable("df_test")
 ```
 
-
 ```python
 spark.catalog.isCached("df_test")
 ```
 
-
-
-
     True
-
-
-
 
 ```python
 # let's uncache df_train
 spark.catalog.uncacheTable("df_train")
 ```
 
-
 ```python
 spark.catalog.isCached("df_train")
 ```
 
-
-
-
     False
-
-
-
 
 ```python
 spark.catalog.isCached("df_test")
 ```
 
-
-
-
     True
 
-
-
-
 ```python
-# How about clearing all cached tables at once. 
+# How about clearing all cached tables at once.
 spark.catalog.clearCache()
 ```
-
 
 ```python
 spark.catalog.isCached("df_train")
 ```
 
-
-
-
     False
-
-
-
 
 ```python
 
 ```
-
 
 ```python
 # creating a global temp view
 df_train.createGlobalTempView("df_train")
 ```
-
 
 ```python
 # listing all views in global_temp
@@ -2612,22 +2270,13 @@ spark.sql("SHOW VIEWS IN global_temp;").show()
     |           |df_train|       true|
     |           | mytable|       true|
     +-----------+--------+-----------+
-    
-
-
 
 ```python
-# dropping a table. 
+# dropping a table.
 spark.catalog.dropGlobalTempView("df_train")
 ```
 
-
-
-
     True
-
-
-
 
 ```python
 # checking that global temp view is dropped.
@@ -2641,21 +2290,12 @@ spark.sql("SHOW VIEWS IN global_temp;").show()
     |         |df_train|       true|
     |         | mytable|       true|
     +---------+--------+-----------+
-    
-
-
 
 ```python
 spark.catalog.dropTempView("df_train")
 ```
 
-
-
-
     True
-
-
-
 
 ```python
 # checking that global temp view is dropped.
@@ -2668,9 +2308,6 @@ spark.sql("SHOW VIEWS IN global_temp;").show()
     |         | df_test|       true|
     |         | mytable|       true|
     +---------+--------+-----------+
-    
-
-
 
 ```python
 spark.sql("SHOW VIEWS").show()
@@ -2682,12 +2319,10 @@ spark.sql("SHOW VIEWS").show()
     |         | df_test|       true|
     |         | mytable|       true|
     +---------+--------+-----------+
-    
-
 
 ## Dealing with Missing Values
-### Cabin
 
+### Cabin
 
 ```python
 # filling the null values in cabin with "N".
@@ -2697,7 +2332,6 @@ df_test = df_test.na.fill('N', subset=['Cabin'])
 ```
 
 ### Fare
-
 
 ```python
 ## how do we find out the rows with missing values?
@@ -2710,11 +2344,8 @@ df_test.where(df_test['Fare'].isNull()).show()
     +-----------+------+------------------+----+----+-----+-----+------+----+-----+--------+
     |       1044|     3|Storey, Mr. Thomas|male|60.5|    0|    0|  3701|NULL|    N|       S|
     +-----------+------+------------------+----+----+-----+-----+------+----+-----+--------+
-    
 
-
-Here, We can take the average of the **Fare** column to fill in the NaN value. However, for the sake of learning and practicing, we will try something else. We can take the average of the values where **Pclass** is ***3***, **Sex** is ***male*** and **Embarked** is ***S***
-
+Here, We can take the average of the **Fare** column to fill in the NaN value. However, for the sake of learning and practicing, we will try something else. We can take the average of the values where **Pclass** is **_3_**, **Sex** is **_male_** and **Embarked** is **_S_**
 
 ```python
 missing_value = df_test.filter(
@@ -2722,13 +2353,12 @@ missing_value = df_test.filter(
     (df_test.Embarked == 'S') &
     (df_test.Sex == "male")
 )
-## filling in the null value in the fare column using Fare mean. 
+## filling in the null value in the fare column using Fare mean.
 df_test = df_test.na.fill(
     missing_value.select(mean('Fare')).collect()[0][0],
     subset=['Fare']
 )
 ```
-
 
 ```python
 # Checking
@@ -2739,11 +2369,8 @@ df_test.where(df_test['Fare'].isNull()).show()
     |PassengerId|Pclass|Name|Sex|Age|SibSp|Parch|Ticket|Fare|Cabin|Embarked|
     +-----------+------+----+---+---+-----+-----+------+----+-----+--------+
     +-----------+------+----+---+---+-----+-----+------+----+-----+--------+
-    
-
 
 ### Embarked
-
 
 ```python
 df_train.where(df_train['Embarked'].isNull()).show()
@@ -2755,15 +2382,11 @@ df_train.where(df_train['Embarked'].isNull()).show()
     |         62|       1|     1| Icard, Miss. Amelie|female|38.0|    0|    0|113572|80.0|  B28|    NULL|
     |        830|       1|     1|Stone, Mrs. Georg...|female|62.0|    0|    0|113572|80.0|  B28|    NULL|
     +-----------+--------+------+--------------------+------+----+-----+-----+------+----+-----+--------+
-    
-
-
 
 ```python
-## Replacing the null values in the Embarked column with the mode. 
+## Replacing the null values in the Embarked column with the mode.
 df_train = df_train.na.fill('C', subset=['Embarked'])
 ```
-
 
 ```python
 ## checking
@@ -2774,9 +2397,6 @@ df_train.where(df_train['Embarked'].isNull()).show()
     |PassengerId|Survived|Pclass|Name|Sex|Age|SibSp|Parch|Ticket|Fare|Cabin|Embarked|
     +-----------+--------+------+----+---+---+-----+-----+------+----+-----+--------+
     +-----------+--------+------+----+---+---+-----+-----+------+----+-----+--------+
-    
-
-
 
 ```python
 df_test.where(df_test.Embarked.isNull()).show()
@@ -2786,12 +2406,10 @@ df_test.where(df_test.Embarked.isNull()).show()
     |PassengerId|Pclass|Name|Sex|Age|SibSp|Parch|Ticket|Fare|Cabin|Embarked|
     +-----------+------+----+---+---+-----+-----+------+----+-----+--------+
     +-----------+------+----+---+---+-----+-----+------+----+-----+--------+
-    
-
 
 ## Feature Engineering
-### Cabin
 
+### Cabin
 
 ```python
 ## this is a code to create a wrapper for function, that works for both python and Pyspark.
@@ -2802,7 +2420,7 @@ from pyspark.sql.types import StringType, IntegerType, ArrayType, DataType
 class py_or_udf:
     def __init__(self, returnType : DataType=StringType()):
         self.spark_udf_type = returnType
-        
+
     def __call__(self, func : Callable):
         def wrapped_func(*args, **kwargs):
             if any([isinstance(arg, Column) for arg in args]) or \
@@ -2812,32 +2430,24 @@ class py_or_udf:
                 return func(*args, **kwargs)
         return wrapped_func
 
-    
+
 @py_or_udf(returnType=StringType())
 def first_char(col):
     return col[0]
-    
-```
 
+```
 
 ```python
 df_train = df_train.withColumn('Cabin', first_char(df_train['Cabin']))
 ```
 
-
 ```python
 df_test = df_test.withColumn('Cabin', first_char(df_test['Cabin']))
 ```
 
-
 ```python
 df_train.limit(5).toPandas()
 ```
-
-                                                                                    
-
-
-
 
 <div>
 <style scoped>
@@ -2852,6 +2462,7 @@ df_train.limit(5).toPandas()
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -2951,10 +2562,7 @@ df_train.limit(5).toPandas()
 </table>
 </div>
 
-
-
-We can use the average of the fare column We can use pyspark's ***groupby*** function to get the mean fare of each cabin letter.
-
+We can use the average of the fare column We can use pyspark's **_groupby_** function to get the mean fare of each cabin letter.
 
 ```python
 df_train.groupBy('Cabin').mean("Fare").show()
@@ -2973,11 +2581,8 @@ df_train.groupBy('Cabin').mean("Fare").show()
     |    N|  19.1573253275109|
     |    G|          13.58125|
     +-----+------------------+
-    
 
-
-Now, these mean can help us determine the unknown cabins, if we compare each unknown cabin rows with the given mean's above. Let's write a simple function so that we can give cabin names based on the means. 
-
+Now, these mean can help us determine the unknown cabins, if we compare each unknown cabin rows with the given mean's above. Let's write a simple function so that we can give cabin names based on the means.
 
 ```python
 @py_or_udf(returnType=StringType())
@@ -3003,19 +2608,17 @@ def cabin_estimator(i):
     return a
 ```
 
-
 ```python
-## separating data where Cabin == 'N', remeber we used 'N' for Null. 
+## separating data where Cabin == 'N', remeber we used 'N' for Null.
 df_withN = df_train.filter(df_train['Cabin'] == 'N')
 df2 = df_train.filter(df_train['Cabin'] != 'N')
 
-## replacing 'N' using cabin estimated function. 
+## replacing 'N' using cabin estimated function.
 df_withN = df_withN.withColumn('Cabin', cabin_estimator(df_withN['Fare']))
 
-# putting the dataframe back together. 
-df_train = df_withN.union(df2).orderBy('PassengerId') 
+# putting the dataframe back together.
+df_train = df_withN.union(df2).orderBy('PassengerId')
 ```
-
 
 ```python
 #let's do the same for test set
@@ -3026,7 +2629,6 @@ df_test = df_testN.union(df_testNoN).orderBy('PassengerId')
 ```
 
 ### Name
-
 
 ```python
 ## creating UDF functions
@@ -3049,18 +2651,16 @@ def name_length_group(size):
     return a
 ```
 
-
 ```python
-## getting the name length from name. 
+## getting the name length from name.
 df_train = df_train.withColumn("name_length", name_length(df_train['Name']))
 
-## grouping based on name length. 
+## grouping based on name length.
 df_train = df_train.withColumn("nLength_group", name_length_group(df_train['name_length']))
 ```
 
-
 ```python
-## Let's do the same for test set. 
+## Let's do the same for test set.
 df_test = df_test.withColumn("name_length", name_length(df_test['Name']))
 
 df_test = df_test.withColumn("nLength_group", name_length_group(df_test['name_length']))
@@ -3068,9 +2668,8 @@ df_test = df_test.withColumn("nLength_group", name_length_group(df_test['name_le
 
 ### Title
 
-
 ```python
-## this function helps getting the title from the name. 
+## this function helps getting the title from the name.
 @py_or_udf(returnType=StringType())
 def get_title(name):
     return name.split('.')[0].split(',')[1].strip()
@@ -3078,7 +2677,6 @@ def get_title(name):
 df_train = df_train.withColumn("title", get_title(df_train['Name']))
 df_test = df_test.withColumn('title', get_title(df_test['Name']))
 ```
-
 
 ```python
 ## we are writing a function that can help us modify title column
@@ -3097,16 +2695,13 @@ def fuse_title1(feature):
         return feature
 ```
 
-
 ```python
 df_train = df_train.withColumn("title", fuse_title1(df_train["title"]))
 ```
 
-
 ```python
 df_test = df_test.withColumn("title", fuse_title1(df_test['title']))
 ```
-
 
 ```python
 print(df_train.toPandas()['title'].unique())
@@ -3116,24 +2711,21 @@ print(df_test.toPandas()['title'].unique())
     ['Mr' 'Mrs' 'Miss' 'Master' 'rare']
     ['Mr' 'Mrs' 'Miss' 'Master' 'rare']
 
-
 ### family_size
-
 
 ```python
 df_train = df_train.withColumn("family_size", df_train['SibSp']+df_train['Parch'])
 df_test = df_test.withColumn("family_size", df_test['SibSp']+df_test['Parch'])
 ```
 
-
 ```python
-## bin the family size. 
+## bin the family size.
 @py_or_udf(returnType=StringType())
 def family_group(size):
     """
     This funciton groups(loner, small, large) family based on family size
     """
-    
+
     a = ''
     if (size <= 1):
         a = 'loner'
@@ -3144,7 +2736,6 @@ def family_group(size):
     return a
 ```
 
-
 ```python
 df_train = df_train.withColumn("family_group", family_group(df_train['family_size']))
 df_test = df_test.withColumn("family_group", family_group(df_test['family_size']))
@@ -3152,7 +2743,6 @@ df_test = df_test.withColumn("family_group", family_group(df_test['family_size']
 ```
 
 ### is_alone
-
 
 ```python
 @py_or_udf(returnType=IntegerType())
@@ -3163,14 +2753,12 @@ def is_alone(num):
         return 0
 ```
 
-
 ```python
 df_train = df_train.withColumn("is_alone", is_alone(df_train['family_size']))
 df_test = df_test.withColumn("is_alone", is_alone(df_test["family_size"]))
 ```
 
 ### ticket
-
 
 ```python
 ## dropping ticket column
@@ -3180,31 +2768,27 @@ df_test = df_test.drop("ticket")
 
 ### calculated_fare
 
-
 ```python
 from pyspark.sql.functions import expr, col, when, coalesce, lit
 ```
 
-
 ```python
-## here I am using a something similar to if and else statement, 
+## here I am using a something similar to if and else statement,
 #when(condition, value_when_condition_met).otherwise(alt_condition)
 df_train = df_train.withColumn(
-    "calculated_fare", 
+    "calculated_fare",
     when((col("Fare")/col("family_size")).isNull(), col('Fare'))
     .otherwise((col("Fare")/col("family_size"))))
 ```
 
-
 ```python
 df_test = df_test.withColumn(
-    "calculated_fare", 
+    "calculated_fare",
     when((col("Fare")/col("family_size")).isNull(), col('Fare'))
     .otherwise((col("Fare")/col("family_size"))))
 ```
 
 ### fare_group
-
 
 ```python
 @py_or_udf(returnType=StringType())
@@ -3212,7 +2796,7 @@ def fare_group(fare):
     """
     This function creates a fare group based on the fare provided
     """
-    
+
     a= ''
     if fare <= 4:
         a = 'Very_low'
@@ -3227,7 +2811,6 @@ def fare_group(fare):
     return a
 ```
 
-
 ```python
 df_train = df_train.withColumn("fare_group", fare_group(col("Fare")))
 df_test = df_test.withColumn("fare_group", fare_group(col("Fare")))
@@ -3235,17 +2818,14 @@ df_test = df_test.withColumn("fare_group", fare_group(col("Fare")))
 
 # That's all for today. Let's come back tomorrow when we will learn how to apply machine learning with Pyspark
 
-
 ```python
 # Binarizing, Bucketing & Encoding
 ```
-
 
 ```python
 train = spark.read.csv('../input/titanic/train.csv', header = True, inferSchema=True)
 test = spark.read.csv('../input/titanic/test.csv', header = True, inferSchema=True)
 ```
-
 
 ```python
 train.show()
@@ -3276,9 +2856,6 @@ train.show()
     |         20|       1|     3|Masselmani, Mrs. ...|female|NULL|    0|    0|            2649|  7.225| NULL|       C|
     +-----------+--------+------+--------------------+------+----+-----+-----+----------------+-------+-----+--------+
     only showing top 20 rows
-    
-
-
 
 ```python
 # Binarzing
@@ -3290,7 +2867,6 @@ bin = Binarizer(threshold=0.0, inputCol='SibSp', outputCol='SibSpBin')
 # Apply the transform
 train = bin.transform(train)
 ```
-
 
 ```python
 train.select('SibSp', 'SibSpBin').show(10)
@@ -3311,9 +2887,6 @@ train.select('SibSp', 'SibSpBin').show(10)
     |  1.0|     1.0|
     +-----+--------+
     only showing top 10 rows
-    
-
-
 
 ```python
 # Bucketing
@@ -3329,13 +2902,9 @@ buck = Bucketizer(splits=splits, inputCol='Fare', outputCol='FareB')
 train = buck.transform(train)
 ```
 
-
 ```python
 train.toPandas().head(10)
 ```
-
-
-
 
 <div>
 <style scoped>
@@ -3350,6 +2919,7 @@ train.toPandas().head(10)
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -3546,9 +3116,6 @@ train.toPandas().head(10)
 </table>
 </div>
 
-
-
-
 ```python
 # One Hot Encoding
 # it is a two step process
@@ -3565,7 +3132,6 @@ model = stringIndexer.fit(train)
 indexed = model.transform(train)
 ```
 
-
 ```python
 # Step 2: One Hot Encode
 # Create encoder transformer
@@ -3580,9 +3146,6 @@ encoded_df = model.transform(indexed)
 encoded_df.toPandas().head()
 ```
 
-
-
-
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -3596,6 +3159,7 @@ encoded_df.toPandas().head()
     .dataframe thead th {
         text-align: right;
     }
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -3719,18 +3283,13 @@ encoded_df.toPandas().head()
 </table>
 </div>
 
-
-
-
 ```python
 
 ```
 
-
 ```python
 
 ```
-
 
 ```python
 
@@ -3779,7 +3338,6 @@ encoded_df.toPandas().head()
 
 ### Other DataFrame Methods
 
-
 ```python
 df_train.show(5)
 ```
@@ -3794,9 +3352,6 @@ df_train.show(5)
     |          5|       0|     3|Allen, Mr. Willia...|  male|35.0|    0|    0|   8.05|    G|       S|         24|       medium|   Mr|          0|       loner|       1|           8.05|       low|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+-----+-----------+------------+--------+---------------+----------+
     only showing top 5 rows
-    
-
-
 
 ```python
 # agg
@@ -3808,15 +3363,12 @@ df_train.agg({"Age" : "min"}).show()
     +--------+
     |    0.42|
     +--------+
-    
-
-
 
 ```python
 # agg
 from pyspark.sql import functions as F
 df_train.groupBy("Sex").agg(
-    F.min("Age").name("min_age"), 
+    F.min("Age").name("min_age"),
     F.max("Age").alias("max_age")).show()
 ```
 
@@ -3826,9 +3378,6 @@ df_train.groupBy("Sex").agg(
     |female|   0.75|   63.0|
     |  male|   0.42|   80.0|
     +------+-------+-------+
-    
-
-
 
 ```python
 # colRegex
@@ -3845,9 +3394,6 @@ df_train.select(df_train.colRegex("`(Sex)?+.+`")).show(5)
     |          5|       0|     3|Allen, Mr. Willia...|35.0|    0|    0|   8.05|    G|       S|         24|       medium|   Mr|          0|       loner|       1|           8.05|       low|
     +-----------+--------+------+--------------------+----+-----+-----+-------+-----+--------+-----------+-------------+-----+-----------+------------+--------+---------------+----------+
     only showing top 5 rows
-    
-
-
 
 ```python
 # distinct
@@ -3864,9 +3410,6 @@ df_train[['Pclass', 'Sex']].distinct().show()
     |     1|female|
     |     2|  male|
     +------+------+
-    
-
-
 
 ```python
 # another way
@@ -3884,9 +3427,6 @@ df_train[['Pclass', 'Sex']].dropDuplicates().show()
     |     1|female|
     |     2|  male|
     +------+------+
-    
-
-
 
 ```python
 # beware, this is probably not something we want when we try to do dropDuplicates
@@ -3900,9 +3440,6 @@ df_train.dropDuplicates(subset=['Pclass']).show()
     |         10|       1|     2|Nasser, Mrs. Nich...|female|14.0|    1|    0|30.0708|    T|       C|         35|       medium|  Mrs|          1|       loner|       1|        30.0708|      high|
     |          1|       0|     3|Braund, Mr. Owen ...|  male|22.0|    1|    0|   7.25|    G|       S|         23|       medium|   Mr|          1|       loner|       1|           7.25|       low|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+-----+-----------+------------+--------+---------------+----------+
-    
-
-
 
 ```python
 # drop_dupllicates()
@@ -3920,9 +3457,6 @@ df_train[['Pclass', 'Sex']].drop_duplicates().show()
     |     1|female|
     |     2|  male|
     +------+------+
-    
-
-
 
 ```python
 # drop
@@ -3940,9 +3474,6 @@ df_train.drop('Name').show(5)
     |          5|       0|     3|  male|35.0|    0|    0|   8.05|    G|       S|         24|       medium|   Mr|          0|       loner|       1|           8.05|       low|
     +-----------+--------+------+------+----+-----+-----+-------+-----+--------+-----------+-------------+-----+-----------+------------+--------+---------------+----------+
     only showing top 5 rows
-    
-
-
 
 ```python
 # drop
@@ -3960,35 +3491,20 @@ df_train.drop("name", "Survived").show(5)
     |          5|     3|  male|35.0|    0|    0|   8.05|    G|       S|         24|       medium|   Mr|          0|       loner|       1|           8.05|       low|
     +-----------+------+------+----+-----+-----+-------+-----+--------+-----------+-------------+-----+-----------+------------+--------+---------------+----------+
     only showing top 5 rows
-    
-
-
 
 ```python
 # dropna
 df_train.dropna(how="any", subset=["Age"]).count()
 ```
 
-
-
-
     714
-
-
-
 
 ```python
 #similarly
 df_train.na.drop(how="any", subset=['Age']).count()
 ```
 
-
-
-
     714
-
-
-
 
 ```python
 # exceptAll
@@ -3997,7 +3513,6 @@ df1 = spark.createDataFrame(
         [("a", 1), ("a", 1), ("a", 1), ("a", 2), ("b",  3), ("c", 4)], ["C1", "C2"])
 df2 = spark.createDataFrame([("a", 1),("a", 1), ("b", 3)], ["C1", "C2"])
 ```
-
 
 ```python
 df1.show()
@@ -4013,9 +3528,6 @@ df1.show()
     |  b|  3|
     |  c|  4|
     +---+---+
-    
-
-
 
 ```python
 df2.show()
@@ -4028,9 +3540,6 @@ df2.show()
     |  a|  1|
     |  b|  3|
     +---+---+
-    
-
-
 
 ```python
 df1.exceptAll(df2).show()
@@ -4043,9 +3552,6 @@ df1.exceptAll(df2).show()
     |  a|  2|
     |  c|  4|
     +---+---+
-    
-
-
 
 ```python
 # intersect
@@ -4058,13 +3564,10 @@ df1.intersect(df2).show()
     |  b|  3|
     |  a|  1|
     +---+---+
-    
-
-
 
 ```python
 # intersectAll
-# intersectAll preserves the duplicates. 
+# intersectAll preserves the duplicates.
 df1.intersectAll(df2).show()
 ```
 
@@ -4075,22 +3578,13 @@ df1.intersectAll(df2).show()
     |  a|  1|
     |  b|  3|
     +---+---+
-    
-
-
 
 ```python
 # Returns True if the collect() and take() methods can be run locally
 df_train.isLocal()
 ```
 
-
-
-
     False
-
-
-
 
 ```python
 ## fillna
@@ -4122,9 +3616,6 @@ df_train.fillna("N", subset=['Cabin']).show()
     |         20|       1|     3|Masselmani, Mrs. ...|female|NULL|    0|    0|  7.225|    G|       C|         23|       medium|   Mrs|          0|       loner|       1|             7.225|       low|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+------------------+----------+
     only showing top 20 rows
-    
-
-
 
 ```python
 # similarly
@@ -4157,26 +3648,16 @@ df_train.na.fill("N", subset=['Cabin']).show()
     |         20|       1|     3|Masselmani, Mrs. ...|female|NULL|    0|    0|  7.225|    G|       C|         23|       medium|   Mrs|          0|       loner|       1|             7.225|       low|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+------------------+----------+
     only showing top 20 rows
-    
-
-
 
 ```python
 age_mean = df_train.agg({"Age": "mean"}).collect()[0][0]
 ```
 
-
 ```python
 age_mean
 ```
 
-
-
-
     29.69911764705882
-
-
-
 
 ```python
 df_train.fillna({"Age": age_mean, "Cabin": "N"})[['Age', "Cabin"]].show(10)
@@ -4197,32 +3678,22 @@ df_train.fillna({"Age": age_mean, "Cabin": "N"})[['Age', "Cabin"]].show(10)
     |             14.0|    T|
     +-----------------+-----+
     only showing top 10 rows
-    
-
-
 
 ```python
 # first
 df_train.first()
 ```
 
-
-
-
     Row(PassengerId=1, Survived=0, Pclass=3, Name='Braund, Mr. Owen Harris', Sex='male', Age=22.0, SibSp=1, Parch=0, Fare=7.25, Cabin='G', Embarked='S', name_length=23, nLength_group='medium', title='Mr', family_size=1, family_group='loner', is_alone=1, calculated_fare=7.25, fare_group='low')
-
-
-
 
 ```python
 def f(passenger):
     print(passenger.Name)
 ```
 
-
 ```python
 # foreach
-# this prints out in the terminal. 
+# this prints out in the terminal.
 df_train.foreach(f)
 ```
 
@@ -4241,7 +3712,7 @@ df_train.foreach(f)
     Saundercock, Mr. William Henry
     Andersson, Mr. Anders Johan
     Vestrom, Miss. Hulda Amanda Adolfina
-    Hewlett, Mrs. (Mary D Kingcome) 
+    Hewlett, Mrs. (Mary D Kingcome)
     Rice, Master. Eugene
     Williams, Mr. Charles Eugene
     Vander Planke, Mrs. Julius (Emelia Maria Vandemoortele)
@@ -5083,7 +4554,7 @@ df_train.foreach(f)
     Carter, Mrs. Ernest Courtenay (Lilian Hughes)
     Aks, Mrs. Sam (Leah Rosen)
     Wick, Mrs. George Dennick (Mary Hitchcock)
-    Daly, Mr. Peter Denis 
+    Daly, Mr. Peter Denis
     Baclini, Mrs. Solomon (Latifa Qurban)
     Razi, Mr. Raihed
     Hansen, Mr. Claus Peter
@@ -5118,8 +4589,6 @@ df_train.foreach(f)
     Behr, Mr. Karl Howell
     Dooley, Mr. Patrick
 
-
-
 ```python
 # freqItems
 # this function is meant for exploratory data analysis.
@@ -5131,13 +4600,10 @@ df_train.freqItems(cols=["Cabin"]).show()
     +--------------------+
     |[D, A, B, E, T, C...|
     +--------------------+
-    
-
-
 
 ```python
 # groupBy
-# pandas value_counts() equivalent. 
+# pandas value_counts() equivalent.
 df_train.groupBy("Fare").count().orderBy("count", ascending=False).show()
 ```
 
@@ -5166,9 +4632,6 @@ df_train.groupBy("Fare").count().orderBy("count", ascending=False).show()
     |31.275|    7|
     +------+-----+
     only showing top 20 rows
-    
-
-
 
 ```python
 df_train.groupBy(['Sex', 'Pclass']).count().show()
@@ -5184,9 +4647,6 @@ df_train.groupBy(['Sex', 'Pclass']).count().show()
     |  male|     2|  108|
     |  male|     1|  122|
     +------+------+-----+
-    
-
-
 
 ```python
 df_train.hint("broadcast").show()
@@ -5220,9 +4680,6 @@ df_train.hint("broadcast").show()
     |         20|       1|     3|Masselmani, Mrs. ...|female|NULL|    0|    0|  7.225|    G|       C|         23|       medium|   Mrs|          0|       loner|       1|             7.225|       low|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+------------------+----------+
     only showing top 20 rows
-    
-
-
 
 ```python
 # isStreaming
@@ -5231,13 +4688,7 @@ df_train.hint("broadcast").show()
 df_train.isStreaming
 ```
 
-
-
-
     False
-
-
-
 
 ```python
 # sort/orderBy
@@ -5269,9 +4720,6 @@ df_train.sort('Survived', ascending = False).show()
     |        195|       1|     1|Brown, Mrs. James...|female|44.0|    0|    0|27.7208|    B|       C|         41|         good|   Mrs|          0|       loner|       1|        27.7208|      high|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+---------------+----------+
     only showing top 20 rows
-    
-
-
 
 ```python
 # randomSplit
@@ -5280,18 +4728,11 @@ df_train.sort('Survived', ascending = False).show()
 splits = df_train.randomSplit([1.0, 2.0], seed=42)
 ```
 
-
 ```python
 splits[0].count()
 ```
 
-
-
-
     315
-
-
-
 
 ```python
 splits[0].show(5)
@@ -5307,21 +4748,12 @@ splits[0].show(5)
     |         26|       1|     3|Asplund, Mrs. Car...|female|38.0|    1|    5|31.3875|    T|       S|         57|         long|   Mrs|          6|       large|       0|        5.23125|      high|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+------+-----------+------------+--------+---------------+----------+
     only showing top 5 rows
-    
-
-
 
 ```python
 splits[1].count()
 ```
 
-
-
-
     576
-
-
-
 
 ```python
 splits[1].show(5)
@@ -5337,9 +4769,6 @@ splits[1].show(5)
     |          6|       0|     3|    Moran, Mr. James|  male|NULL|    0|    0| 8.4583|    G|       Q|         16|        short|   Mr|          0|       loner|       1|         8.4583|       low|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+-----+-----------+------------+--------+---------------+----------+
     only showing top 5 rows
-    
-
-
 
 ```python
 # replace
@@ -5356,9 +4785,6 @@ df_train.replace("male", "Man").show(5)
     |          5|       0|     3|Allen, Mr. Willia...|   Man|35.0|    0|    0|   8.05|    G|       S|         24|       medium|   Mr|          0|       loner|       1|           8.05|       low|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+-----+-----------+------------+--------+---------------+----------+
     only showing top 5 rows
-    
-
-
 
 ```python
 # similarly
@@ -5375,13 +4801,10 @@ df_train.na.replace("male", "Man").show(5)
     |          5|       0|     3|Allen, Mr. Willia...|   Man|35.0|    0|    0|   8.05|    G|       S|         24|       medium|   Mr|          0|       loner|       1|           8.05|       low|
     +-----------+--------+------+--------------------+------+----+-----+-----+-------+-----+--------+-----------+-------------+-----+-----------+------------+--------+---------------+----------+
     only showing top 5 rows
-    
-
-
 
 ```python
 # cube
-# the following stack overflow explains cube better than official spark page. 
+# the following stack overflow explains cube better than official spark page.
 # https://stackoverflow.com/questions/37975227/what-is-the-difference-between-cube-rollup-and-groupby-operators
 df = spark.createDataFrame([("foo", 1), ("foo", 2), ("bar", 2), ("bar", 2)]).toDF("x", "y")
 df.show()
@@ -5395,9 +4818,6 @@ df.show()
     |bar|  2|
     |bar|  2|
     +---+---+
-    
-
-
 
 ```python
 temp_df.show()
@@ -5428,9 +4848,6 @@ temp_df.show()
     |         49|       0|     3| Samaan, Mr. Youssef|male|NULL|    2|    0|           2662|21.6792| NULL|       C|
     +-----------+--------+------+--------------------+----+----+-----+-----+---------------+-------+-----+--------+
     only showing top 20 rows
-    
-
-
 
 ```python
 df.cube("x", "y").count().show()
@@ -5448,12 +4865,11 @@ df.cube("x", "y").count().show()
     | bar|   2|    2|
     | bar|NULL|    2|
     +----+----+-----+
-    
-
 
 Here is what cube returns
-```
-// +----+----+-----+     
+
+````
+// +----+----+-----+
 // |   x|   y|count|
 // +----+----+-----+
 // | foo|   1|    1|   <- count of records where x = foo AND y = 1
@@ -5470,7 +4886,7 @@ Here is what cube returns
 ```python
 # rollup
 df.rollup("x", "y").count().show()
-```
+````
 
     +----+----+-----+
     |   x|   y|count|
@@ -5482,11 +4898,10 @@ df.rollup("x", "y").count().show()
     | bar|   2|    2|
     | bar|NULL|    2|
     +----+----+-----+
-    
-
 
 Here is what rollup's look like
-```
+
+````
 // +----+----+-----+
 // |   x|   y|count|
 // +----+----+-----+
@@ -5505,8 +4920,7 @@ Here is what rollup's look like
 # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.sameSemantics.html
 df1 = spark.range(10)
 df2 = spark.range(10)
-```
-
+````
 
 ```python
 df1.show()
@@ -5526,9 +4940,6 @@ df1.show()
     |  8|
     |  9|
     +---+
-    
-
-
 
 ```python
 df2.show()
@@ -5548,57 +4959,30 @@ df2.show()
     |  8|
     |  9|
     +---+
-    
-
-
 
 ```python
 df1.withColumn("col1", df1.id * 2).sameSemantics(df2.withColumn("col1", df2.id * 2))
 ```
 
-
-
-
     True
-
-
-
 
 ```python
 df1.withColumn("col1", df1.id * 2).sameSemantics(df2.withColumn("col1", df2.id + 2))
 ```
 
-
-
-
     False
-
-
-
 
 ```python
 df1.withColumn("col1", df1.id * 2).sameSemantics(df2.withColumn("col0", df2.id * 2))
 ```
 
-
-
-
     True
-
-
-
 
 ```python
 df_train.schema
 ```
 
-
-
-
     StructType([StructField('PassengerId', IntegerType(), True), StructField('Survived', IntegerType(), True), StructField('Pclass', IntegerType(), True), StructField('Name', StringType(), True), StructField('Sex', StringType(), True), StructField('Age', DoubleType(), True), StructField('SibSp', IntegerType(), True), StructField('Parch', IntegerType(), True), StructField('Fare', DoubleType(), True), StructField('Cabin', StringType(), True), StructField('Embarked', StringType(), False), StructField('name_length', IntegerType(), True), StructField('nLength_group', StringType(), True), StructField('title', StringType(), True), StructField('family_size', IntegerType(), True), StructField('family_group', StringType(), True), StructField('is_alone', IntegerType(), True), StructField('calculated_fare', DoubleType(), True), StructField('fare_group', StringType(), True)])
-
-
-
 
 ```python
 df_train.printSchema()
@@ -5624,5 +5008,3 @@ df_train.printSchema()
      |-- is_alone: integer (nullable = true)
      |-- calculated_fare: double (nullable = true)
      |-- fare_group: string (nullable = true)
-    
-
